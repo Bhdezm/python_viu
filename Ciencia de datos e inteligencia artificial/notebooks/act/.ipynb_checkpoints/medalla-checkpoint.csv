@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>120 years of Olympic history: athletes and results | Kaggle</title>
+  <meta charset="utf-8" />
+    <meta name="robots" content="index, follow" />
+  <meta name="description" content="basic bio data on athletes and medal results from Athens 1896 to Rio 2016" />
+  <meta name="turbolinks-cache-control" content="no-cache" />
+    <meta name="keywords" content="sports,history" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+  <meta name="theme-color" content="#008ABC" />
+  <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" type="text/javascript">
+    window["pageRequestStartTime"] = 1680089132481;
+    window["pageRequestEndTime"] = 1680089132610;
+    window["initialPageLoadStartTime"] = new Date().getTime();
+  </script>
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin="anonymous" /><link rel="preconnect" href="https://stats.g.doubleclick.net" /><link rel="preconnect" href="https://storage.googleapis.com" /><link rel="preconnect" href="https://apis.google.com" />
+  <link href="/static/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link rel="manifest" href="/static/json/manifest.json" crossorigin="use-credentials">
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/icon?family=Google+Material+Icons&display=block"
+    rel="preload" as="style" />
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,400i,500,500i,600,600i,700,700i&display=swap"
+    rel="preload" as="style" />
+  <link href="https://fonts.googleapis.com/icon?family=Google+Material+Icons&display=block"
+    rel="stylesheet" media="print" id="async-google-font-1" />
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,400i,500,500i,600,600i,700,700i&display=swap"
+    rel="stylesheet" media="print" id="async-google-font-2" />
+  <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" type="text/javascript">
+    const styleSheetIds = ["async-google-font-1", "async-google-font-2"];
+    styleSheetIds.forEach(function (id) {
+      document.getElementById(id).addEventListener("load", function() {
+        this.media = "all";
+      });
+    });
+  </script>
+
+    <link rel="canonical" href="/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results" />
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor.css?v=e4c7092a1deb800ab1ec" />
+    <link rel="stylesheet" type="text/css" href="/static/assets/app.css?v=c458ddd8db0c1f5f7f52" />
+  
+    
+ 
+      <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==">
+        try{(function(a,s,y,n,c,h,i,d,e){d=s.createElement("style");
+        d.appendChild(s.createTextNode(""));s.head.appendChild(d);d=d.sheet;
+        y=y.map(x => d.insertRule(x + "{ opacity: 0 !important }"));
+        h.start=1*new Date;h.end=i=function(){y.forEach(x => x<d.cssRules.length ? d.deleteRule(x) : {})};
+        (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+        })(window,document,['.site-header-react__nav'],'dataLayer',2000,{'GTM-52LNT9S':true});}catch(ex){}
+    </script>
+    <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==">
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-12629138-1', {
+            'optimize_id': 'GTM-52LNT9S',
+            'displayFeaturesTask': null,
+            'send_page_view': false,
+            'content_group1': 'Datasets'
+        });
+        gtag('config', 'G-T7QHS60L4Q', {
+            'optimize_id': 'GTM-52LNT9S',
+            'displayFeaturesTask': null,
+            'send_page_view': false,
+            'content_group1': 'Datasets'
+        });
+    </script>
+    <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" async src="https://www.googletagmanager.com/gtag/js?id=UA-12629138-1"></script>
+
+  
+    
+    <meta property="og:url" content="/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results" />
+    <meta property="og:title" content="120 years of Olympic history: athletes and results" />
+    <meta property="og:description" content="basic bio data on athletes and medal results from Athens 1896 to Rio 2016" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://storage.googleapis.com/kaggle-datasets-images/31029/39579/77cb8de03f3b255454531c3051fe6627/dataset-card.jpg?t=2018-06-11-13-11-52" />
+    <meta property="fb:app_id" content="2665027677054710" />
+
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@kaggledatasets" />
+
+
+  <meta name="twitter:site" content="@Kaggle" /> 
+  
+    
+    <script nonce="7xYSLZ/FRcU+G7ahKEj59g==" type="application/ld+json">{"@context":"http://schema.org/","@type":"Dataset","name":"120 years of Olympic history: athletes and results","description":"### Context\n\nThis is a historical dataset on the modern Olympic Games, including all the Games from Athens 1896 to Rio 2016.  I scraped this data from www.sports-reference.com in May 2018. The R code I used to [scrape](https://github.com/rgriff23/Olympic_history/blob/master/R/olympics%20scrape.R) and [wrangle](https://github.com/rgriff23/Olympic_history/blob/master/R/olympics%20wrangle.R) the data is on GitHub. I recommend checking [my kernel](https://www.kaggle.com/heesoo37/olympic-history-data-a-thorough-analysis) before starting your own analysis. \n\nNote that the Winter and Summer Games were held in the same year up until 1992. After that, they staggered them such that Winter Games occur on a four year cycle starting with 1994, then Summer in 1996, then Winter in 1998, and so on. A common mistake people make when analyzing this data is to assume that the Summer and Winter Games have always been staggered. \n\n### Content\n\nThe file athlete_events.csv contains 271116 rows and 15 columns. Each row corresponds to an individual athlete competing in an individual Olympic event (athlete-events). The columns are:\n\n1. **ID** - Unique number for each athlete\n2. **Name** - Athlete's name\n3. **Sex** - M or F\n4. **Age** - Integer\n5. **Height** - In centimeters\n6. **Weight** - In kilograms\n7. **Team** - Team name\n8. **NOC** - National Olympic Committee 3-letter code\n9. **Games** - Year and season\n10. **Year** - Integer\n11. **Season** - Summer or Winter\n12. **City** - Host city\n13. **Sport** - Sport\n14. **Event** - Event\n15. **Medal** - Gold, Silver, Bronze, or NA\n\n\n### Acknowledgements\n\nThe Olympic data on www.sports-reference.com is the result of an incredible amount of research by a group of Olympic history enthusiasts and self-proclaimed 'statistorians'. Check out their [blog](http://olympstats.com/) for more information. All I did was consolidated their decades of work into a convenient format for data analysis. \n\n### Inspiration\n\nThis dataset provides an opportunity to ask questions about how the Olympics have evolved over time, including questions about the participation and performance of women, different nations, and different sports and events. ","url":"https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results","version":2,"keywords":["subject, health and fitness, exercise, sports","subject, people and society, social science, history"],"license":{"@type":"CreativeWork","name":"CC0: Public Domain","url":"https://creativecommons.org/publicdomain/zero/1.0/"},"identifier":["31029"],"includedInDataCatalog":{"@type":"DataCatalog","name":"Kaggle","url":"https://www.kaggle.com"},"creator":{"@type":"Person","name":"rgriffin","url":"https://www.kaggle.com/heesoo37","image":"https://storage.googleapis.com/kaggle-avatars/thumbnails/1966677-kg.jpg"},"distribution":[{"@type":"DataDownload","requiresSubscription":true,"encodingFormat":"zip","fileFormat":"zip","contentUrl":"https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/download?datasetVersionNumber=2","contentSize":"5690772 bytes"}],"commentCount":18,"dateModified":"2018-06-15T06:10:41.637Z","discussionUrl":"https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results/discussion","alternateName":"basic bio data on athletes and medal results from Athens 1896 to Rio 2016","isAccessibleForFree":true,"thumbnailUrl":"https://storage.googleapis.com/kaggle-datasets-images/31029/39579/77cb8de03f3b255454531c3051fe6627/dataset-card.jpg?t=2018-06-11-13-11-52","interactionStatistic":[{"@type":"InteractionCounter","interactionType":"http://schema.org/CommentAction","userInteractionCount":18},{"@type":"InteractionCounter","interactionType":"http://schema.org/DownloadAction","userInteractionCount":128775},{"@type":"InteractionCounter","interactionType":"http://schema.org/ViewAction","userInteractionCount":618526},{"@type":"InteractionCounter","interactionType":"http://schema.org/LikeAction","userInteractionCount":1902}]}</script>
+
+
+  
+    
+
+  
+    
+
+
+    <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==">window['useKaggleAnalytics'] = true;</script>
+
+  <script id="gapi-target" nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" src="https://apis.google.com/js/api.js" defer
+    async></script>
+  <script nonce="7xYSLZ/FRcU+G7ahKEj59g==" src="/static/assets/runtime.js?v=f2910e6b1c5d112de864" data-turbolinks-track="reload"></script>
+  <script nonce="7xYSLZ/FRcU+G7ahKEj59g==" src="/static/assets/vendor.js?v=21532f9e4dadadbf4726" data-turbolinks-track="reload"></script>
+  <script nonce="7xYSLZ/FRcU+G7ahKEj59g==" src="/static/assets/app.js?v=73c1b046618867b73fc3" data-turbolinks-track="reload"></script>
+    <script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" type="text/javascript">
+      window.kaggleStackdriverConfig = {
+        key: 'AIzaSyA4eNqUdRRskJsCZWVz-qL655Xa5JEMreE',
+        projectId: 'kaggle-161607',
+        service: 'web-fe',
+        version: 'ci',
+        userId: '0'
+      }
+    </script>
+</head>
+
+<body data-turbolinks="false">
+  <main>
+    
+
+
+
+
+
+<div id="site-container"></div>
+
+<div id="site-body" class="hide">
+    
+
+<div data-component-name="DatasetMaterialContainer" style="display: flex; flex-direction: column; flex: 1 0 auto;"></div><script class="kaggle-component" nonce="7xYSLZ/FRcU+G7ahKEj59g==">var Kaggle=window.Kaggle||{};Kaggle.State=Kaggle.State||[];Kaggle.State.push({"basics":{"datasetId":31029,"slug":"120-years-of-olympic-history-athletes-and-results","title":"120 years of Olympic history: athletes and results","description":"### Context\n\nThis is a historical dataset on the modern Olympic Games, including all the Games from Athens 1896 to Rio 2016.  I scraped this data from www.sports-reference.com in May 2018. The R code I used to [scrape](https://github.com/rgriff23/Olympic_history/blob/master/R/olympics%20scrape.R) and [wrangle](https://github.com/rgriff23/Olympic_history/blob/master/R/olympics%20wrangle.R) the data is on GitHub. I recommend checking [my kernel](https://www.kaggle.com/heesoo37/olympic-history-data-a-thorough-analysis) before starting your own analysis. \n\nNote that the Winter and Summer Games were held in the same year up until 1992. After that, they staggered them such that Winter Games occur on a four year cycle starting with 1994, then Summer in 1996, then Winter in 1998, and so on. A common mistake people make when analyzing this data is to assume that the Summer and Winter Games have always been staggered. \n\n### Content\n\nThe file athlete_events.csv contains 271116 rows and 15 columns. Each row corresponds to an individual athlete competing in an individual Olympic event (athlete-events). The columns are:\n\n1. **ID** - Unique number for each athlete\n2. **Name** - Athlete\u0027s name\n3. **Sex** - M or F\n4. **Age** - Integer\n5. **Height** - In centimeters\n6. **Weight** - In kilograms\n7. **Team** - Team name\n8. **NOC** - National Olympic Committee 3-letter code\n9. **Games** - Year and season\n10. **Year** - Integer\n11. **Season** - Summer or Winter\n12. **City** - Host city\n13. **Sport** - Sport\n14. **Event** - Event\n15. **Medal** - Gold, Silver, Bronze, or NA\n\n\n### Acknowledgements\n\nThe Olympic data on www.sports-reference.com is the result of an incredible amount of research by a group of Olympic history enthusiasts and self-proclaimed \u0027statistorians\u0027. Check out their [blog](http://olympstats.com/) for more information. All I did was consolidated their decades of work into a convenient format for data analysis. \n\n### Inspiration\n\nThis dataset provides an opportunity to ask questions about how the Olympics have evolved over time, including questions about the participation and performance of women, different nations, and different sports and events. ","viewCount":618526,"downloadCount":128775,"scriptCount":288,"topicCount":18,"owner":{"id":1966677,"imageUrl":"https://storage.googleapis.com/kaggle-avatars/thumbnails/1966677-kg.jpg","name":"rgriffin","profileUrl":"/heesoo37","slug":"heesoo37","userTier":"CONTRIBUTOR"},"license":{"id":1,"name":"CC0: Public Domain","url":"https://creativecommons.org/publicdomain/zero/1.0/"},"overview":"basic bio data on athletes and medal results from Athens 1896 to Rio 2016","collaboratorList":{"owner":{"userId":1966677,"profileUrl":"/heesoo37","thumbnailUrl":"https://storage.googleapis.com/kaggle-avatars/thumbnails/1966677-kg.jpg","name":"rgriffin","slug":"heesoo37","userTier":"CONTRIBUTOR","type":"OWNER"}},"coverImageUrl":"https://storage.googleapis.com/kaggle-datasets-images/31029/39579/77cb8de03f3b255454531c3051fe6627/dataset-cover.jpg?t=2018-06-11-13-11-52","data":{"totalSize":5690772,"isFileset":true,"canDownload":true,"firestorePath":"N23CK8u8CBC04m8u5mxl/versions/Ea36JVIJsvvyl7a4Oxcf","downloadUrl":"/datasets/heesoo37/heesoo37/download?datasetVersionNumber=2","versionId":43113,"id":33193},"voteCount":1902,"medalUrl":"/static/images/medals/datasets/goldl@2x.png","downloadUrl":"/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/download?datasetVersionNumber=2","lastUpdateTime":"2018-06-15T06:10:41.637Z","datasetVersionNumber":2,"creatorDisplayName":"rgriffin","cardImageUrl":"https://storage.googleapis.com/kaggle-datasets-images/31029/39579/77cb8de03f3b255454531c3051fe6627/dataset-card.jpg?t=2018-06-11-13-11-52","categories":{"tags":[{"id":4141,"name":"sports","fullPath":"subject \u003E health and fitness \u003E exercise \u003E sports","listingUrl":"/datasets?group=public\u0026tagids=4141","description":"The sports tag covers the whole spectrum of sports around the world. We\u0027ve got tennis, we\u0027ve got football, and we\u0027ve even got kitefoil racing.","datasetCount":4774,"competitionCount":23,"notebookCount":3328,"tagUrl":"/tags/sports","displayName":"Sports"},{"id":9109,"name":"history","fullPath":"subject \u003E people and society \u003E social science \u003E history","listingUrl":"/datasets?group=public\u0026tagids=9109","description":"History is generally the study of past events that have shaped the world. Here on Kaggle, you\u0027ll find historical records and analyses on topics like Bitcoin data, UFO sightings, and sports tournaments.","datasetCount":953,"competitionCount":2,"notebookCount":279,"tagUrl":"/tags/history","displayName":"History"}]},"datasetExternalUrl":"https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results","forumId":39331,"datasetVersionId":40943,"canCreateTasks":true,"moderationStatus":"PRIVATED_MODERATION_STATUS_NO_ABUSE","lastVersionNumber":2,"diffType":"VERSIONED"}});performance && performance.mark && performance.mark("DatasetMaterialContainer.componentCouldBootstrap");</script><script nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==" type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+    preferredFont: "TeX",
+    availableFonts: ["STIX", "TeX"],
+    linebreaks: {
+    automatic: true
+    },
+    EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+    inlineMath: [["\\(", "\\)"], ["\\\\(", "\\\\)"]],
+    displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+    processEscapes: true,
+    ignoreClass: "tex2jax_ignore|dno"
+    },
+    TeX: {
+    noUndefined: {
+    attributes: {
+    mathcolor: "red",
+    mathbackground: "#FFEEEE",
+    mathsize: "90%"
+    }
+    }
+    },
+    Macros: {
+    href: "{}"
+    },
+    skipStartupTypeset: true,
+    messageStyle: "none",
+    extensions: ["Safe.js"],
+    });
+</script>
+<script type="text/javascript" nonce="7xYSLZ/FRcU&#x2B;G7ahKEj59g==">
+  window.addEventListener("DOMContentLoaded", () => {
+    const head = document.getElementsByTagName("head")[0];
+    const useProdHosts = ["www.kaggle.com", "admin.kaggle.com"];
+    const subdomain = useProdHosts.includes(window.location.hostname) ? "www" : "staging";
+
+    const lib = document.createElement("script");
+    lib.type = "text/javascript";
+    lib.src = `https://${subdomain}.kaggleusercontent.com/static/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML`;
+    head.appendChild(lib);
+  });
+</script>
+
+
+
+
+
+</div>
+
+
+
+
+  </main>
+</body>
+
+</html>

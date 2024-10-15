@@ -1,0 +1,1125 @@
+<meta charset="utf-8">
+**04EPPY - 010 - Deep Learning**
+    <small>©2021 VIU - 04EPPY Ciencia de Datos e Inteligencia Artificial - Òscar Garibo</small>
+
+Deep Learning
+==============================================================
+
+El termino inteligencia artificial se empezó a usar a mediados del siglo XX, en un momento de gran empuje del mundo tecnológico. Eran los albores de la electrónica y los ordenadores eran del tamaño de habitaciones, y solo podían realizar operaciones muy simples. Pero las realizaban de manera tan eficiente y rápida comparados con los humanos que ya se entreveían futuros desarrollos en el area de la inteligencia electrónica.
+
+Con los pies en la tierra, la inteligencia artificial se suele definir como, el procesamiento automático en un ordenador capaz de realizar operaciones que podrían parecer exclusivas a la inteligencia humana.
+
+El concepto de inteligencia artificial es variable tal como se ha desarrollado el progreso de las máquinas, y con el concepto de 'exclusivas a la inteligencia humana'. En esos primeros años la inteligencia artificial se consideraba como la capacidad de los ordenadores de realizar cálculos y encontrar soluciones matemáticas a problemas complejos 'de relevancia exclusiva para grandes científicos'. En los 80 y 90 maduró, en sus capacidades para evaluar riesgos, recursos y tomar decisiones. En las últimas décadas, con el continuo crecimiento del potencial de procesamiento de los ordenadores, la posibilidad de que esos sistemas fueran capaces de aprender de manera automática se ha añadido a la definición.
+
+En estos últimos años el concepto de inteligencia artificial se ha centrado en operaciones de reconocimiento visual y auditivo, que hasta ahora eran de 'relevancia exclusiva para humanos'. Operaciones como reconocimiento de imágenes, detección de objetos, segmentación de objetos, traducción de lenguajes, comprensión del lenguaje natural, reconocimiento del habla,... Todos estos problemas aún están bajo estudio gracias a las técnicas de deep learning.
+
+El aprendizaje automático, machine learning, con todas sus técnicas y algoritmos, por tanto, es una rama de la inteligencia artificial. De hecho, se hace referencia a él, siempre dentro del ámbito de la inteligencia artificial, cuando se usan sistemas que son capaces de aprender para solucionar algunos problemas que hasta hace poco eran considerados 'exclusivos de humanos'.
+
+Dentro del aprendizaje automático, se define una subclase, llamada deep learning. El aprendizaje automático usa sistemas que pueden aprender, esto puede ser hecho a través de características dentro del sistema (a menudo parámetros en un modelo fijo) que pueden ser modificadas en respuesta a los datos de entrada destinados al aprendizaje.
+
+Las técnicas de deep learning van un paso más allá. De hecho, los sistemas de deep learning están estructurados para no tener estas características intrínsecas en el modelo, pero estas características son extraídas y detectadas por el propio sistema de manera automática como resultado del aprendizaje en sí mismo. Entre estos sistemas que pueden hacer esto, están de manera específica, las redes neuronales artificiales.
+
+![Figure [res/010_000]: Relación entre IA, ML y DL](res/010_000.png)
+
+Las técnicas de deep learning se han vuelto populares estos últimos años para solucionar problemas de reconocimiento visual y auditivo. En este contexto, se han desarrollado muchas técnicas de cálculo y algoritmos nuevos, exprimiendo el potencial del lenguaje Python. Pero la teoría detrás del deep learning data de los años 40, y los primeros estudios teóricos sobre redes neuronales artificiales y sus aplicaciones se desarrollaron en los años 60.
+
+El hecho es que solo en los últimos años las redes neuronales, con todas las técnicas relacionadas de deep learning que usan, se han mostrado útiles para resolver muchos problemas de inteligencia artificial. Esto es así debido al hecho de que solo ahora existen tecnologías que pueden ser implementadas de una manera útil y eficiente.
+
+De hecho, a nivel de aplicación, el deep learning requiere de muchas operaciones matemáticas complejas, que necesitan millones o incluso billones de parámetros. Los procesadores de los 90, aunque eran potentes, no eran capaces de realizar estos tipos de operaciones en tiempos razonables. Incluso hoy, los cálculos en el procesador CPU, aunque mejorado, sigue necesitando tiempos de procesamiento muy altos. Esta ineficiencia es debida a la arquitectura particular de dichas CPUs, que se ha diseñado para realizar operaciones matemáticas de manera eficiente, pero que no son las requeridas por las redes neuronales.
+
+Pero estos últimos tiempos, se ha desarrollado un nuevo tipo de hardware, las GPUs (Graphics Processing Units) o tarjetas gráficas, gracias al enorme impulso comercia del mercado de los videojuegos. De hecho, este tipo de procesadores se ha diseñado para realizar cálculos vectoriales de manera muy eficiente, como multiplicaciones matriciales, que son necesarias para el pintado de gráficos o simulaciones de realidad en 3D.
+
+Gracias a esta innovación tecnológica, muchas técnicas de deep learning han podido ser finalmente aplicadas. De hecho, para realizar las redes neuronales y su aprendizaje, se usan los tensores (matrices multidimensionales), que ejecutan muchas operaciones matemáticas. Y es justamente este tipo de trabajo el que las GPUs pueden hacer de manera más eficiente. Gracias a esta contribución, la velocidad de procesamiento del deep learning se ha incrementado en varias ordenes de magnitud (horas o días en lugar de meses).
+
+Otro factor muy importante que ha afectado al desarrollo del deep learning es la enorme cantidad de datos a los que se pueden acceder hoy en día. De hecho, los datos son el ingrediente fundamental para el funcionamiento de las redes neuronales, tanto en la fase de aprendizaje, como en la de verificación.
+
+Gracias al despliegue de Internet, ahora todo el mundo puede producir datos y acceder a ellos. Mientras que hace un pocos años solo algunas organizaciones ofrecían datos para el análisis, hoy, gracias a IoT (Internet of Things), muchos sensores y dispositivos están continuamente obteniendo datos y poniéndolos a disposición en las redes. No solo eso, incluso las redes sociales y motores de búsqueda pueden recolectar cantidades de datos enormes, analizando en tiempo real a millones de usuarios conectados a sus servicios, dicho fenómeno se conoce como big data. Muchos de los datos relacionados con problemas que se quieren solucionar con técnicas de deep learning, están ahora disponibles de manera gratuita, a través de fuentes de datos open data source.
+
+Otro factor que contribuido en gran medida al éxito y difusión de las técnicas de deep learning es el lenguaje de programación Python.
+
+En el pasado, planear sistemas de redes neuronales era muy complejo. El único lenguaje capaz de realizar estas tareas era C++, un lenguaje complicado, difícil de usar y que poca gente conoce en profundidad. Además, para trabajar con la GPU (necesario para este tipo de cálculos), era necesario conocer CUDA (Compute Unified Device Architecture), la arquitectura de desarrollo de hardware de las tarjetas gráficas de NVIDIA con todas sus especificaciones técnicas.
+
+Pero ahora, gracias a Python, la programación de redes neuronales y técnicas de deep learning se han convertido en problemas de alto nivel. De hecho, los programadores ya no tiene que preocuparse de la arquitectura y las especificaciones técnicas de la tarjeta gráfica GPU, se puede centrar exclusivamente en la parte relacionada con deep learning. Además, las características del propio lenguaje Python, permiten a los programadores desarrollar código sencillo e intuitivo.
+
+Se han desarrollado varios frameworks para Python por parte de organizaciones y comunidades de desarrolladores, que simplifican en gran manera el cálculo y aplicación de las técnicas de deep learning. Algunas de estas librerías incluso compiten entre sí, realizando las mismas operaciones, pero cada una de ellas se basa en diferentes mecanismos internos.
+
+Entre estos frameworks disponibles gratuitamente:
+
+- Tensorflow, es una librería de código abierto desarrollado por Google para cálculo numérico que está basada en el uso de grafos de flujo de datos (data flow graphs). Estos son grafos donde los nodos representan las operaciones matemáticas y las aristas representan los tensores (arrays de datos multidimensionales). Su arquitectura es muy flexible y puede distribuir los cálculos en varias CPUs y GPUs.
+
+- Caffe2, es un framework desarrollado para ofrecer una manera sencilla de trabajar con deep learning. Permite probar el modelo y cálculos de los algoritmos usando la potencia de GPUs en la nube.
+
+- PyTorch, es un framework científico completamente basado en el uso de GPUs. Funciona de una manera altamente eficiente.
+
+- Theano, es la librería de Python más usada en el campo científico del desarrollo, definición y evaluación de expresiones matemáticas y modelos físicos. Por desgracia, se dejó de desarrollar hace unos años. Pero sigue siendo un framework de referencia gracias al gran número de programas desarrollados con esta librería.
+
+Redes neuronales artificiales
+==============================================================
+
+Las redes neuronales son un elemento fundamental para el deep learning, y su uso es la base de casi todas las técnicas de deep learning. De hecho, estos sistemas son capaces de aprender, gracias a su estructura particular que imita los circuitos neuronales biológicos.
+
+Las redes neuronales son estructuras complejas creadas conectando componentes básicos muy sencillos, que se repiten dentro de la estructura. En función del número de estos componentes básicos y el tipo de conexiones, se forman redes más y más complejas, con diferentes arquitecturas, cada una de ellas presentará unas características peculiares, de acuerdo a su capacidad para aprender y solucionar diferentes problemas.
+
+![Figure [res/010_001]: Esquema de la estructura de una red neuronal genérica](res/010_001.png)
+
+Las unidades básicas son los nodos (los círculos coloreados en Figure [res/010_001]), que en el modelo biológico simulan el funcionamiento de una neurona dentro de una red neuronal. Estas neuronas artificiales realizan operaciones muy simples, similares a sus equivalentes biológicas. Se activan cuando la suma total de las señales de entrada que reciben excede un determinado umbral de activación.
+
+Estos nodos pueden transmitir señales entre ellos a través de conexiones, llamadas aristas (edges), que simulan el funcionamiento de las sinapsis biológicas (las flechas azules en Figure [res/010_001]). A través de estas aristas, las señales enviadas por una neurona pasan a la siguiente, comportándose como un filtro. Esto es, una arista convierte el mensaje de salida de una neurona, en una señal excitante o inhibitoria, aumentando o disminuyendo su intensidad, de acuerdo a una serie de reglas pre establecidas (se suele aplicar un peso, weight, a cada arista).
+
+La red neuronal tiene una serie de nodos que se usan para recibir la señal de entrada del exterior, este primer grupo de nodos se suele representar en una columna en la parte izquierda del esquema de una red neuronal. Este grupo de nodos representa la primera capa de la red, capa de entrada. En función de las señales de entrada que recibe, algunas (o todas) de esas neuronas se activarán procesando la señal recibida y transmitirán los resultados como salida a otro grupo de neuronas, a través de las aristas.
+
+Este segundo grupo está en una posición intermedia dentro de la red, y se llama la capa oculta, hidden layer, puesto que las neuronas en este grupo no se comunican con el exterior, ni entrada ni salida, y por tanto permanecen ocultas. Cada una de estas neuronas tienen muchas aristas de entrada, a menudo con todas las neuronas de la capa previa. Estas neuronas también serán activadas cuando el total de la señal de entrada supere un cierto umbra. Si eso es así, procesarán la señal y la transmitirán a otro grupo de neuronas (hacia la derecha en el esquema). Este grupo puede ser otra capa oculta o la capa de salida, que es la última capa que enviará los resultados hacia afuera.
+
+En general, se tiene un flujo de datos que entra en la red (de izquierda a derecha), que será procesada de una forma más o menos compleja en función de la estructura, y producirá un resultado de salida.
+
+El comportamiento, capacidad y eficiencia de una red neuronal dependerá exclusivamente de como están conectados los nodos y el número total de capas asignados a cada uno de ellos. Todos esos factores definen la arquitectura de la red.
+
+Single Layer Perceptron SLP
+--------------------------------------------------------------
+
+El modelo SLP (Single Layer Perceptron) es el modelo más simple para una red neuronal.
+
+![Figure [res/010_002]: Arquitectura de Single Layer Perceptron](res/010_002.png width="500px")
+
+Esta estructura es muy simple, es una red de dos capas, sin capa oculta. En ella una serie de neuronas de entrada mandan señales a una neurona de salida a través de diferentes conexiones, cada una con su propio peso.
+
+![Figure [res/010_003]: Arquitectura más detallada de Single Layer Perceptron](res/010_003.png)
+
+Los vértices de esta estructura vienen representados por su modelo matemático a través de un vector de pesos, que consiste en la memoria local de la neurona.
+
+$$W = (w1, w2, ..., wn)$$
+
+La neurona de salida recibe un vector de entrada de señales `xi`, donde cada una viene de una neurona diferente.
+
+$$X = (x1, x2, ..., xn)$$
+
+Entonces procesa las señales de entrada a través de una suma con pesos.
+
+$$\sum_{i=0}^n w_ix_i = w_1x_1 + w_2x_2 +  ... + w_nx_n = s$$
+
+La señal total `s` es la percibida por la neurona de salida. Si la señal excede el umbral de activación de la neurona, entonces la activará, enviando un 1 como valor, en caso contrario se mantendrá inactiva, mandando un -1.
+
+\[
+  Output = \begin{cases}
+    1, & \text{if $s > 0$} \\
+    -1, & \text{otherwise}
+  \end{cases}
+\]
+
+Esta es la función de activación más simple, pero se pueden usar otras más complejas, como se puede observar en Figure [res/010_004].
+
+![Figure [res/010_004]: Ejemplos de funciones de activación habituales](res/010_004.png)
+
+El procedimiento de aprendizaje de una red neuronal, llamada la fase de aprendizaje, trabaja de manera iterativa. Se ejecutan un número predeterminado de ciclos de operaciones sobre la red, en cada uno de ellos los pesos de las sinapsis `wi` se modifican ligeramente. Cada ciclo de aprendizaje se denomina epoch. Para llevar a cabo el aprendizaje hay que usar los datos de entrada apropiados, los conjuntos de datos de entrenamiento.
+
+En estos conjuntos de entrenamiento, para cada valor de entrada se obtiene el valor de salida esperado. Comparando los valores de salida producidos por la red con los que se esperaban se pueden analizar las diferencias y modificar los valores de los pesos, o incluso reducir su número. En la practica, esto se realiza minimizando una función de coste (loss), que es especifica del problema de deep learning. De hecho, los pesos de las diferentes conexiones serán modificados en cada epoch para minimizar el coste (loss).
+
+En resumen, el aprendizaje supervisado se aplica a las redes neuronales.
+
+Al final de la fase de aprendizaje, se pasa a la fase de evaluación, en la cual el SLP entrenado debe analizar otro conjunto de entradas (conjunto de pruebas), cuyos resultados también se conocen. Evaluando las diferencias entre los valores obtenidos y los esperados, se conoce el grado de aptitud de la red para resolver el problema. A menudo, el porcentaje de casos acertados contra los erróneos se usa para indicar este valor, llamado accuracy.
+
+Multi Layer Perceptron MLP
+--------------------------------------------------------------
+
+Una arquitectura más compleja y eficiente es MLP (Multi Layer Perceptron). En esta estructura, hay una o más capas ocultas interpuestas entre la capa de entrada y la capa de salida.
+
+![Figure [res/010_005]: Arquitectura de Multi Layer Perceptron](res/010_005.png)
+
+Aunque más complejos, los modelos de redes neuronales MLP están basados en los mismos conceptos básicos de los modelos SLP. Hay pesos asignados a cada conexión, que deben ser minimizados basándose en la evaluación del conjunto de entrenamiento, igual que en SLP. Aquí, de igual manera, cada nodo debe procesar todas las señales de entrada a través de una función de activación. Y esta vez, la presencia de varias capas ocultas hará que la red sea capaz de aprender más, adaptándose más efectivamente al tipo de problema que se está tratando de solucionar.
+
+Por otro lado, desde un punto de vista práctico, la mayor complejidad de este sistema necesita algoritmos más complejos, tanto para la fase de entrenamiento como para la de evaluación. Uno de ellos es el algoritmo de back propagation, usado para modificar los pesos de las diversas conexiones para minimizar la función de coste, con el fin de converger rápida y progresivamente los valores de salida con los esperados.
+
+También se usan otros algoritmos específicamente para la fase de minimización de la función de coste (o error), y generalmente se denominan técnicas de descenso de gradiente (gradient descent).
+
+Hay una correspondencia real entre las redes neuronales artificiales y el funcionamiento del cerebro humano que tratan de simular, al menos a alto nivel. La primera capa procesa la señal de entrada, y la pasa a la siguiente capa, que la procesa, y la reenvía, y así sucesivamente, hasta que llega a un resultado final. Para cada capa de neuronas, la información de entrada se procesa de una manera determinada, generando diferentes niveles de representación de la misma información.
+
+De hecho, toda el trabajo de elaboración de una red neuronal artificial no es más que la transformación de la información a niveles cada vez más abstractos.
+
+Este funcionamiento es idéntico al que sucede en el córtex cerebral. Por ejemplo, cuando un ojo recibe una imagen, la señal de la imagen pasa a través de varias fases de procesamiento (como las capas de una red neuronal), en las cuales, por ejemplo, se detectan primero los contornos de las figuras (detección de bordes), luego la forma geométrica (percepción de la forma), y por último el reconocimiento de la naturaleza del objeto con su nombre relacionado. Así pues, se ha producido una transformación a diferentes niveles conceptuales de una información de entrada, pasando de una imagen, a líneas, a figuras geométricas, hasta llegar a una palabra.
+
+TensorFlow
+==============================================================
+
+[Tensorflow](https://www.tensorflow.org/) es una librería desarrollada por Google. El propósito de dicha librería es tener una herramienta en el campo de investigación en aprendizaje automático y deep learning. A día de hoy se puede instalar sobre versiones de Python 3.5 a 3.8, con lo cual se recomienda realizar la instalación sobre un entorno virtual creado con alguna de esas versiones. Y para realizar la instalaciópn a través del paquete en [PyPI](https://pypi.org/project/tensorflow/) y pipenv hay que incluir el flag `--pre` para poder realizar la instalación correctamente.
+
+No es necesario preocuparse de instalar la GPU por ahora, para los ejemplos aquí es suficiente con una CPU moderna. Se puede realizar la [configuración de Tensorflow para la GPU](https://www.tensorflow.org/guide/gpu) en cada máquina posteriormente.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash
+E:\Dev\VIU\EPPY> pipenv install tensorflow --pre
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [pipenv]: Instalar tensorflow con pipenv]
+
+Para usar Tensorflow hay que importarlo correctamente y se suele asignar al alias `tf`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import tensorflow as tf
+print(tf.__version__)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [import_tf]: Importar Tensorflow]
+
+Tensorflow está basado completamente en la estructura y uso de grafos y el flujo de datos a través de ellos, explotándolos de tal manera que realicen cálculos matemáticos.
+
+Al grafo creado internamente por Tensorflow en tiempo de ejecución se le llama Data Flow Graph, y está estructurado de acuerdo al modelo matemático que es la base de los cálculos que se quieren realizar. De hecho, Tensorflow permite definir cualquier modelo matemático a través de una serie de instrucciones implementadas en el código. Tensorflow se encargará de traducir este modelo en un Data Flow Graph internamente.
+
+Tensorflow no está limitado al deep learning o para representar redes neuronales artificiales. Se pueden implementar muchos otros métodos de cálculo y análisis, puesto que cualquier sistema físico puede ser representado a través de un modelo matemático. De hecho, esta librería también se usa para implementar otras técnicas de aprendizaje automático, y para el estudio de sistemas físicos complejos a través del cálculo de diferenciales,...
+
+Los nodos en un Data Flow Graph representan operaciones matemáticas, mientras que los vértices del grafo representan tensores (arrays de datos multidimensionales). El propio nombre de Tensorflow deriva del hecho que estos tensores representan el flujo de datos a través de los grafos, que se pueden usar para modelar las redes.
+
+Keras
+--------------------------------------------------------------
+
+Keras es una librería de código abierto escrita en Python, que se ha vuelto muy popular por su diseño limpio y sencillo. Librerías como Tensorflow o PyTorch están enfocadas a la investigación, velocidad, flexibilidad, pero no a la facilidad de uso, lo que las hace complejas de usar incluso para realizar las táreas más simples.
+
+Keras era capaz de trabajar con cualquier backend de deep learning por debajo, y abstraía al programador de las complejidades de dichas librerías de bajo nivel.
+
+En las versiones recientes de Tensorflow, Google ya ha integrado la API de Keras directamente y promueve su uso para el desarrollo. La integración se conoce habitualmente como el API `tf.Keras`, mientras que al proyecto standalone se le conoce como Keras.
+
+Se accede a dicha API de la manera habitual en Python, importando el módulo de Tensorflow, y accediendo a Keras a través del submódulo `keras`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import tensorflow as tf
+tf.keras.__version__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [import_keras]: Importar Tensorflow y usar tf.keras]
+
+Dado que Tensorflow era el backend habitual de la librería standalone Keras, la integración significa que se puede usar una sola librería en lugar de las dos separadas. De hecho, el proyecto Keras recomienda para todos los nuevos desarrollos usar la API de `tf.Keras`.
+
+Ciclo de vida de un modelo de deep learning
+==============================================================
+
+Ciclo de 5 pasos
+--------------------------------------------------------------
+
+Un modelo tiene un ciclo de vida, esto estructura tanto el modelado de un conjunto de datos y facilita la comprensión de la API de `tf.Keras`.
+
+Los cincos pasos del modelo son:
+
+1. Definición
+2. Compilación
+3. Ajuste o entrenamiento
+4. Evaluación
+5. Hacer predicciones
+
+### Definición
+
+Definir el modelo supone que se seleccione el tipo de modelo que se necesita y luego elegir la arquitectura o topología de la red.
+
+Desde la perspectiva de la API, esto supone definir las capas del modelo, configurar cada capa con un número de nodos y una función de activación, y conectar las capas en un modelo cohesivo.
+
+Los modelos se pueden definir con la API Sequential o Functional.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model = Sequential()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [create_model]: Crear un modelo]
+
+### Compilación
+
+Para compilar el modelo hay que seleccionar una función de perdida (loss) que se quiere optimizar, como el error medio cuadrático MSE o cross-entropy. También requiere seleccionar un algoritmo para realizar el procedimiento de optimización, normalmente un descenso de gradiente estocástico (stochastic gradient descent), o una variación moderna, como Adam. También hay que seleccionar las métricas de rendimiento necesarias para la monitorización del proceso de entrenamiento del modelo.
+
+Esto supone llamar a la función `compile` para compilar el modelo para la configuración deseada, que preparará las estructuras de datos apropiadas para usar el modelo que se ha definido.
+
+Se puede especificar el optimizador como un string para una clase de optimizador conocida, como `sgd` para el descenso de gradiente estocástico, o se puede configurar una instancia de una clase optimizadora y usarla. Se puede acudir a la [documentación](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers) de `tf.Keras` para una lista de todos los optimizadores disponibles.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+opt = SGD(learning_rate=0.01, momentum=0.9)
+model.compile(optimizer=opt, loss='binary_crossentropy')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_model]: Compilar el modelo]
+
+Las funciones de perdida más comunes son:
+
+- `binary_crossentropy` para clasificaciones binarias
+- `sparse_categorical_crossentropy` para clasificaciones multi clase
+- `mse`, error medio cuadrático, para regresión
+
+Se puede acudir a la [documentación](https://www.tensorflow.org/api_docs/python/tf/keras/losses) de `tf.Keras` para una lista de todas las funciones de perdida disponibles.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model.compile(optimizer='sgd', loss='mse')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_model_mse]: Compilar el modelo con perdida mse y optimizador sgd]
+
+Las métricas se definen como una lista de cadenas para las funciones de métricas conocidas, o una lista de funciones a llamar para evaluar las predicciones.
+
+Se puede acudir a la [documentación](https://www.tensorflow.org/api_docs/python/tf/keras/metrics) de `tf.Keras` para una lista de todas las funciones de métricas disponibles.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_model_accuracy]: Compilar el modelo la métrica classification accuracy]
+
+### Ajuste/Entrenamiento
+
+Para entrenar el modelo, antes hay que seleccionar la configuración de entrenamiento, como el número de epochs (iteraciones sobre el conjunto de datos de entrenamiento) y el tamaño de los batch (número de muestras usados en un epoch para estimar el error del modelo).
+
+El entrenamiento aplica el algoritmo de optimización elegido para minimizar la función de perdida elegida y actualiza el modelo usando el algoritmo de backpropagation del error.
+
+Este paso es la parte más lenta de todo el proceso, y puede tomar desde segundos, a horas o incluso dias, en función de la complejidad del modelo, el hardware que se usa, y el tamaño del conjunto de datos de entrenamiento.
+
+Entrenar suponer llamar al método `fit` del modelo empezar el proceso, esta llamada bloqueará la ejecución hasta que se haya acabado el proceso de entrenamiento.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model.fit(X, y, epochs=100, batch_size=32)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_train]: Entrenar el modelo]
+
+Mientras se está entrenando el modelo, una barra de progreso resume el estado de cada epoch y el proceso de entrenamiento en general. Esto se puede simplificar en un simple informe del rendimiento del modelo en cada epoch, usando el parámetro `verbose` con valor 2, si no se quiere ninguna información, se puede deshabilitar con el valor 0.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model.fit(X, y, epochs=100, batch_size=32, verbose=0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_train2]: Entrenar el modelo]
+
+### Evaluación
+
+Para evaluar un modelo, antes hay que elegir un conjunto de datos de reserva usado para evaluar el modelo. Este debería ser un conjunto de datos que no se ha usado durante el proceso de entrenamiento, para poder obtener una estimación del rendimiento del modelo sin sesgo cunado se realizan predicciones sobre datos nuevos.
+
+La velocidad de la evaluación es proporcional a la cantidad de datos que se quieren usar para la evaluación, pero es mucho más rápido que el entrenamiento, puesto que el modelo no ha cambiado.
+
+Para evaluar el modelo hay que llamar al método `evaluate`, donde se le pasa el conjunto de datos de reserva, y devuelve un objeto loss y quizás algunas métricas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+loss = model.evaluate(X, y, verbose=0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_evaluate]: Evaluación del modelo]
+
+### Hacer predicciones
+
+Realizar una predicción es el paso final, es el motivo por el cual se ha realizado todo el proceso. Hay que tener nuevos datos para los cuales se necesita una predicción, donde no se tienen valores target.
+
+Simplemente hay que llamar al método ´predict´ del modelo, para realizar la predicción de
+una clase, probabilidad, o valor numérico, lo que sea para lo que se haya diseñado el modelo.
+
+Se puede guardar el modelo para cargarlo más tarde y realizar predicciones. Incluso se puede elegir entrenar un modelo sobre todos los datos disponibles antes de empezar a usarlo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_pred = model.predict(X)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [compile_predict]: Realizar predicción]
+
+Sequential
+--------------------------------------------------------------
+
+El modelo sequential es el modelo más simple, y es ideal para empezar. Se le llama secuencial porque supone definir una clase [`Sequential`](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential) y añadir capas al modelo una a una de forma lineal, desde la entrada hasta la salida.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+model = Sequential()
+model.add(Dense(10, input_shape=(8,)))
+model.add(Dense(1))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [seq]: Modelo secuencial]
+
+En este ejemplo se crea un modelo `Sequential`, que acepta 8 entradas, tiene una capa oculta con 10 nodos y una capa de salida con un nodo para predecir un valor numérico.
+
+La capa visible de la red se define con el parámetro `input_shape` de la primera capa oculta, esto significa que el modelo espera que la entrada de una observación sea un vector de 8 números.
+
+Esta forma de crear modelos es muy simple, puesto que se sigue llamando al método `add` hasta que se han añadido todas las capas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+model = Sequential()
+model.add(Dense(100, input_shape=(8,)))
+model.add(Dense(80))
+model.add(Dense(30))
+model.add(Dense(10))
+model.add(Dense(5))
+model.add(Dense(1))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [seq2]: Modelo secuencial]
+
+En este caso, se define una red MLP con 5 capas ocultas.
+
+Functional
+--------------------------------------------------------------
+
+Los modelos funcionales son más complejos, pero a cambio más flexibles. Supone conectar explícitamente las salidas de una capa con las entradas de otra capa. Se especifica cada conexión. Primero, se define una capa de entrada a través de la clase `Input`, y se especifica la forma de las observaciones de entrada. Se debe guardar una referencia a la capa de entrada al definir el modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Input
+
+x_in = Input(shape=(8,))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [funct_input]: Capa de entrada con modelo funcional]
+
+A continuación, se puede conectar a la entrada otra copa completamente conectada creando una capa y pasándo la capa de entrada. Esto devolverá una referencia a la conexión de salida de esta nueva capa.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras.layers import Dense
+
+x = Dense(10)(x_in)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [funct_layer]: Nueva capa conectada a la capa de entrada]
+
+Entonces se puede conectar esto a una capa de salida de la misma manera.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras.layers import Dense
+
+x_out = Dense(1)(x)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [funct_output_layer]: Nueva capa de salida conectada a la capa anterior]
+
+Una vez conectado todo, se define un objeto `Model` y se especifican las capas de entrada y de salida.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Model
+from tensorflow.keras import Input
+from tensorflow.keras.layers import Dense
+
+x_in = Input(shape=(8,))
+x = Dense(10)(x_in)
+x_out = Dense(1)(x)
+
+model = Model(inputs=x_in, outputs=x_out)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [funct_model]: Modelo funcional]
+
+De esta manera, se pueden generar diseños de modelos más complicados, como modelos que tengan varios caminos de entrada (vectores separados) o modelos que tengan varios caminos de salida (una palabra y un número). Se puede acudir a la [documentación](https://www.tensorflow.org/guide/keras/functional) de `tf.Keras` para más información acerca de la API funcional.
+
+Desarrollar modelos de deep learning
+==============================================================
+
+Modelos de perceptron multicapa
+--------------------------------------------------------------
+
+Un modelo de Perceptron Multicapa, o MLP, es un modelo de red neuronal standard completamente conectado. Está compuesto de capas de nodos donde cada nodo está conectado a todas las salidas de la capa anterior, y la salida de cada nodo está conectada a todas las entradas de los nodos de la siguiente capa.
+
+Un MLP se crea con una o más capas `Dense`. Este modelo es apropiado par datos tabulares, es decir, datos que están en una tabla, con una columna para cada variable, y una fila para cada observación. Hay tres problemas de modelado predictivo que se pueden explorar con un MLP, clasificaciones binarias, clasificaciones multiclase y regresiones.
+
+### MLP para clasificación binaria
+
+Se usará el conjunto de datos Ionosphere para demostrar una clasificación binaria, este conjunto de datos muestra una clasificación de dos clases. Se intenta predecir si una estructura está en la atmósfera o no dadas unas mediciones de un radar.
+
+El dataset se puede obtener [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/ionosphere.csv) y su descripción [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/ionosphere.names).
+
+Se descargará automaticamente desde esa URL a través de la función `read_csv` de pandas. Se usará un `LabelEncoder` para codificar las etiquetas del target que son strings, a valores enteros de 0 y 1. El modelo se entrenará con el 67% de los datos, y el 33% restante será usado para evaluación, se realiza la división usando la función `train_test_split`.
+
+Suele ser buena práctica usar una función de activación `relu` con una inicialización de los pesos a `he_normal`. Esta combinación ayuda en gran medida a superar el problema de los gradientes que desaparecen al entrenar modelos de redes neuronales.
+
+El modelo predice la probabilidad de la clase 1 y usa la función de activación `sigmoid`. Se optimiza usando la version Adam del descenso de gradiente estocástico y busca minimizar la perdida de entropia cruzada, cross-entropy.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from numpy import set_printoptions
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+path = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/ionosphere.csv'
+df = read_csv(path, header=None)
+# split into input and output columns
+X, y = df.values[:, :-1], df.values[:, -1]
+X = X.astype('float32')
+
+y = LabelEncoder().fit_transform(y)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+n_features = X_train.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=150, batch_size=32, verbose=0)
+
+loss, acc = model.evaluate(X_test, y_test, verbose=0)
+print(f'Test Accuracy: {acc:.3f}')
+
+row = [1,0,0.99539,-0.05889,0.85243,0.02306,0.83398,-0.37708,1,0.03760,0.85243,-0.17755,0.59755,-0.44945,0.60536,-0.38223,0.84356,-0.38542,0.58212,-0.32192,0.56971,-0.29674,0.36946,-0.47357,0.56811,-0.51171,0.41078,-0.46168,0.21266,-0.34090,0.42267,-0.54487,0.18641,-0.45300]
+y_pred = model.predict([row])
+set_printoptions(precision=3)
+print(f'Predicted: {y_pred[0][0]:.3f}')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_binary]: Modelo MLP para clasificación binaria]
+
+El ejecutar el código, primero muestra las dimensiones del conjunto de datos, luego entrena el modelo y lo evalua sobre el conjunto de datos de pruebas. Finalmente se hace una predicción para una sola observación.
+
+Los resultados variarán dada la naturaleza no determinista del algoritmo o procedimiento de evaluación, o diferencias en la precisión numérica.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+(235, 34) (116, 34) (235,) (116,)
+Test Accuracy: 0.974
+Predicted: 0.954
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_binary_result]: Resultados del entrenamiento para el modelo MLP para clasificación binaria]
+
+El modelo ha conseguido una callsfication accuracy del 97% y ha predicho con una probabilidad del 95% que la nueva observación pertenece a la clase 1.
+
+### MLP para clasificación multiclase
+
+Se usará el conjunto de datos Iris, que es una clasificación multiclase para demostrar un modelo MLP de clasificación multiclase. Hay que predecir la especie de una flor Iris dadas las medidas de la flor.
+
+El dataset se puede obtener [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv) y su descripción [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.names).
+
+Dado que es una clasificación multicapa, el modelo debe tener un nodo para cada clase en la capa de salida, y usar la función de activación `softmax`. La función de perdida es `sparse_categorial_crossentropy`, que es apropiada para etiquetas de clase codificadas como enteros (0 para una clase, 1 para la siguiente, ...).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from numpy import set_printoptions
+from numpy import argmax
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+path = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv'
+df = read_csv(path, header=None)
+
+X, y = df.values[:, :-1], df.values[:, -1]
+
+X = X.astype('float32')
+
+y = LabelEncoder().fit_transform(y)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+n_features = X_train.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(3, activation='softmax'))
+
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=150, batch_size=32, verbose=0)
+
+loss, acc = model.evaluate(X_test, y_test, verbose=0)
+print(f'Test Accuracy: {acc:.3f}')
+
+row = [5.1,3.5,1.4,0.2]
+y_pred = model.predict([row])
+set_printoptions(precision=3)
+print(f'Predicted: {y_pred} (class={argmax(y_pred)})')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_multiclass]: Entrenamiento para el modelo MLP para clasificación multiclase]
+
+El modelo se entrena y se evalua sobre el conjunto de datos de prueba, y se realiza una predicción sobre una nueva observación.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+(100, 4) (50, 4) (100,) (50,)
+Test Accuracy: 0.980
+Predicted: [[0.814 0.17  0.016]] (class=0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_multiclass_result]: Resultados del entrenamiento para el modelo MLP para clasificación multiclase]
+
+En este caso la precisión classification accuracy es del 98% y la probabildad de la predicción para la nueva observación es un ndarray, donde cada columna es la probabilidad asignada a cada posible clase de salida. En este caso la clase 0 tiene la mayor probabilidad, el 86%.
+
+### MLP para regresión
+
+Para demostrar el uso de un modelo MLP predictivo para regresión se va a usar el conjunto de datos del alojamiento de Boston.
+
+El dataset se puede obtener [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/housing.csv) y su descripción [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/housing.names).
+
+El problema consiste en predecir el valor de una casa basándose en las propiedades de la casa y el vecindario.
+
+Este es un problema de regresión que supone predecir un único valor numérico. Para ello, la capa de salida tendrá un solo nodo y usará la función de activación por defecto, que es la función lineal (sin función de activación). La perdida del error medio cuadrático MSE es minimizado al entrenar el modelo.
+
+Aquí se trabaja con una regresión, no una clasificación, con lo cual no se puede calcular classification accuracy.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from numpy import set_printoptions
+from numpy import sqrt
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+path = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/housing.csv'
+df = read_csv(path, header=None)
+
+X, y = df.values[:, :-1], df.values[:, -1]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+n_features = X_train.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(1))
+
+model.compile(optimizer='adam', loss='mse')
+
+model.fit(X_train, y_train, epochs=150, batch_size=32, verbose=0)
+
+error = model.evaluate(X_test, y_test, verbose=0)
+print(f'MSE: {error:.3f}, RMSE: {sqrt(error):.3f}')
+
+row = [0.00632,18.00,2.310,0,0.5380,6.5750,65.20,4.0900,1,296.0,15.30,396.90,4.98]
+y_pred = model.predict([row])
+set_printoptions(precision=3)
+print(f'Predicted: {y_pred}')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_regression]: Entrenamiento para el modelo MLP para regresión]
+
+En este caso, se puede ver que el modelo ha conseguido un MSE de 49, y un RMSE de 7, donde las unidades son miles de dolares. Y se predice un valor de 25.0 para la nueva observación.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+(339, 13) (167, 13) (339,) (167,)
+MSE: 49.214, RMSE: 7.015
+Predicted: [[25.902]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [mlp_regression_result]: Resultados del entrenamiento para el modelo MLP para regresión]
+
+Modelos de redes convolucionales
+--------------------------------------------------------------
+
+Las redes neuronales convolucionales CNNs, son un tipo de redes diseñadas para recibir entradas de imágenes. Se componen de modelos con capas convolucionales que extraen features (llamadas feature maps) y capas de agrupación que destilan estas features hacia los elementos más destacados.
+
+Las CNNs suelen estar muy afinadas para tareas de clasificación de imágenes, a pesar de que se pueden usar en muchas tareas diversas que puedan recibir imágenes como entrada.
+
+Una tarea típica de clasificación de imágenes es la clasificación de dígitos escritos a mano de [MNIST](https://en.wikipedia.org/wiki/MNIST_database). En este conjunto de datos de decenas de miles de imágenes de dígitos escritos a mano, que deben ser clasificados entre 0 y 9.
+
+La API de `tf.keras` ofrece una manera comoda de descargar y recoger este conjunto de datos directamente.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras.datasets.mnist import load_data
+import matplotlib.pyplot as plt
+
+(trainX, trainy), (testX, testy) = load_data()
+
+print(f'Train: X={trainX.shape}, y={trainy.shape}')
+print(f'Test: X={testX.shape}, y={testy.shape}')
+
+fig, ax = plt.subplots(5, 5)
+ax = ax.flatten()
+
+for i in range(25):
+	ax[i].imshow(trainX[i], cmap=pyplot.get_cmap('gray'))
+
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cnn_plot]: Cargar y mostrar algunas muestras]
+
+Se carga dicho conjunto de datos, se muestran las dimensiones de los conjuntos de entrenamiento y de pruebas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+Train: X=(60000, 28, 28), y=(60000,)
+Test: X=(10000, 28, 28), y=(10000,)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cnn_shapes]: Dimensiones del conjunto de datos]
+
+Luego, usando matplotlib se pintan las primeras 25 muestras de MNIST.
+
+![Figure [res/010_006]: 25 dígitos escritos a mano](res/010_006.png)
+
+Se puede entrenar un modelo CNN para clasificar el conjunto de datos MNIST. Las imágenes son ndarrays de datos de píxels en escala de grises, por lo tanto, hay que añadir una dimensión de canal a los datos antes de poder usar las imágenes como entrada para el modelo. La razón de esto es que los modelos CNN esperan que las imágenes con una dimensión para los canales, es decir, cada muestra que se envía a la red debe tener las dimensiones [filas, columnas, canales], donde los canales son los colores de los datos de la imagen.
+
+Suele ser buena idea scalar los valores de los píxels desde el rango por defecto de 0-255 a 0-1 al entrenar una CNN.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from numpy import set_printoptions
+from numpy import asarray
+from numpy import unique
+from numpy import argmax
+from tensorflow.keras.datasets.mnist import load_data
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import MaxPool2D
+from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Dropout
+
+(x_train, y_train), (x_test, y_test) = load_data()
+
+x_train = x_train.reshape((x_train.shape[0], x_train.shape[1], x_train.shape[2], 1))
+x_test = x_test.reshape((x_test.shape[0], x_test.shape[1], x_test.shape[2], 1))
+
+in_shape = x_train.shape[1:]
+
+n_classes = len(unique(y_train))
+print(in_shape, n_classes)
+
+x_train = x_train.astype('float32') / 255.0
+x_test = x_test.astype('float32') / 255.0
+
+model = Sequential()
+model.add(Conv2D(32, (3,3), activation='relu', kernel_initializer='he_uniform', input_shape=in_shape))
+model.add(MaxPool2D((2, 2)))
+model.add(Flatten())
+model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
+model.add(Dropout(0.5))
+model.add(Dense(n_classes, activation='softmax'))
+
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+model.fit(x_train, y_train, epochs=10, batch_size=128, verbose=0)
+
+loss, acc = model.evaluate(x_test, y_test, verbose=0)
+print(f'Accuracy: {acc:.3f}')
+
+image = x_train[0]
+y_pred = model.predict(asarray([image]))
+set_printoptions(precision=3)
+print(f'Predicted: class={argmax(y_pred)}')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cnn]: Entrenamiento para CNN]
+
+Primero se muestra el tamaño de cada imagen junto con el número posible de clases, se puede observar que cada imágen es de 28x28 píxels y que hay 10 clases distintas como se esperaba.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+(28, 28, 1) 10
+Accuracy: 0.987
+Predicted: class=5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cnn_results]: Resultados del entrenamiento para CNN]
+
+El modelo ha obtenido una classification accuracy del 98% sobre el conjunto de datos de pruebas, y que además el modelo ha predicho la clase 5 para la primera clase en el conjunto de entrenamiento.
+
+Modelos de redes recurrentes
+--------------------------------------------------------------
+
+Las redes neuronales recurrentes, o RNNs, están diseñadas para operar sobre secuencias de datos. Se han mostrado muy efectivas para problemas de procesamiento de lenguaje natural, donde se proporcionan secuencias de texto como entrada al modelo. También tienen bastante aplicación en el pronóstico de series de tiempo y el reconocimiento de voz.
+
+El tipo de RNN más popular es la red Long Short-Term Memory, o LSTM. Las LSTMs se pueden usar en un modelo para aceptar una secuencia de datos y realizar una predicción, como asignar una clase o predecir un valor numérico como el siguiente valor o valores en la secuencia.
+
+Se usa el conjunto de datos de ventas de coches para mostrar el uso de una LSTM RNN para el pronóstico de una serie de tiempo univariada. El problema planteado supone predecir el número de coches vendidos por mes.
+
+El dataset se puede obtener [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/monthly-car-sales.csv) y su descripción [aquí](https://raw.githubusercontent.com/jbrownlee/Datasets/master/monthly-car-sales.names).
+
+Se enmarca el problema para tomar una ventana de los últimos 5 meses de datos par predecir los datos del mes actual. Para conseguir esto, se define una nueva función, llamada `split_sequence`, que dividirá la secuencia de entrada en ventanas de datos apropiadas para entrenar un modelo de aprendizaje supervisado, como un LSTM.
+
+Por ejemplo, si la secuencia fuera:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [rnn_seq]:]
+
+Las muestras para el entrenamiento del modelo serían:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python
+Input 				    Output
+1, 2, 3, 4, 5 		6
+2, 3, 4, 5, 6 		7
+3, 4, 5, 6, 7 		8
+...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [rnn_seq_training]:]
+
+Se usarán los últimos 12 meses de los datos como conjunto de pruebas.
+
+Las redes LSTM esperan que cada muestra en el conjunto de datos tengan dos dimensiones, la primera es el número de pasos de tiempo (en este caso 5), y la segunda es el número de observaciones por cada paso de tiempo (en este 1).
+
+Puesto que es un tipo de problema de regresión, se usará una función de activación lineal (sin función de activación) e la capa de salida, y se optimiza para la función de perdida MSE error medio cuadrático. Se evaluará el modelo usando el error absoluto medio MAE.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from numpy import set_printoptions
+from numpy import sqrt
+from numpy import asarray
+from pandas import read_csv
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import LSTM
+
+def split_sequence(sequence, n_steps):
+	X, y = list(), list()
+	for i in range(len(sequence)):
+		# find the end of this pattern
+		end_ix = i + n_steps
+		# check if we are beyond the sequence
+		if end_ix > len(sequence)-1:
+			break
+		# gather input and output parts of the pattern
+		seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+		X.append(seq_x)
+		y.append(seq_y)
+	return asarray(X), asarray(y)
+
+path = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/monthly-car-sales.csv'
+df = read_csv(path, header=0, index_col=0, squeeze=True)
+
+values = df.values.astype('float32')
+
+n_steps = 5
+
+X, y = split_sequence(values, n_steps)
+
+X = X.reshape((X.shape[0], X.shape[1], 1))
+
+n_test = 12
+X_train, X_test, y_train, y_test = X[:-n_test], X[-n_test:], y[:-n_test], y[-n_test:]
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+model = Sequential()
+model.add(LSTM(100, activation='relu', kernel_initializer='he_normal', input_shape=(n_steps,1)))
+model.add(Dense(50, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(50, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(1))
+
+model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+
+model.fit(X_train, y_train, epochs=350, batch_size=32, verbose=0, validation_data=(X_test, y_test))
+
+mse, mae = model.evaluate(X_test, y_test, verbose=0)
+
+row = asarray([18024.0, 16722.0, 14385.0, 21342.0, 17180.0]).reshape((1, n_steps, 1))
+y_pred = model.predict(row)
+set_printoptions(precision=3)
+print(f'Predicted: {y_pred}')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [rnn]: Entrenamiento para RNN LSTM]
+
+Se muestra el tamaño de los conjuntos de entrenamiento y pruebas, confirmando que las 12 últimas muestras se usan para la evaluación del modelo. En este caso el modelo ha conseguido un MAE de 2900 y ha predicho el siguiente valor en la secuencia de prueba como 15963, cuando el valor esperado era 14577 (último valor en el conjunto de datos), lo cual está bastante cerca.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Output:
+
+(91, 5, 1) (12, 5, 1) (91,) (12,)
+MSE: 13394771.000, RMSE: 3659.887, MAE: 2976.149
+Predicted: [[15963.104]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [rnn_results]: Resultados del entrenamiento para RNN LSTM]
+
+Suele ser buena práctica escalar y hacer que la serie sea estacionaria con los datos antes de entrenar el modelo.
+
+Funciones avanzadas
+==============================================================
+
+Visualizar un modelo
+--------------------------------------------------------------
+
+La arquitectura de los modelos de deep learning puede convertirse en algo grande y complejo muy fácilmente. Por eso, es importante tener una idea clara de las conexiones y el flujo de datos en el modelo. Esto es especialmente importante si se está usando la API funcional para asegurarse que se tienen conectadas las capas del modelo de la forma que se pretende.
+
+Hay dos herramientas que se pueden usar para visualizar el modelo, una descripción de texto y un gráfico.
+
+### Descripción del modelo en texto
+
+Se puede mostrar una descripción en texto del modelo llamando al método `summary` sobre el objeto del modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(8,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(1, activation='sigmoid'))
+
+model.summary()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [visualize_text]: Visualizar la arquitectura del modelo en modo texto]
+
+Esto da como resultado un pequeño sumario donde se pueden ver las capas y su orden, con sus dimensiones de salida, sus parámetros (pesos) y el número total de parámetros de todo el modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+dense (Dense)                (None, 10)                90
+_________________________________________________________________
+dense_1 (Dense)              (None, 8)                 88
+_________________________________________________________________
+dense_2 (Dense)              (None, 1)                 9
+=================================================================
+Total params: 187
+Trainable params: 187
+Non-trainable params: 0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [model_text]: Arquitectura del modelo en modo texto]
+
+### Dibujar la arquitectura del modelo
+
+Se puede crear un gráfico del modelo llamando al método `plot_model`. Para hacer esto, se necesita tener instalada la librería [GraphViz](https://graphviz.gitlab.io/) y el paquete de Python disponible en [PyPI](https://pypi.org/project/graphviz/).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.utils import plot_model
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(8,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(1, activation='sigmoid'))
+
+plot_model(model, 'model.png', show_shapes=True)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [visualize_plot]: Visualizar la arquitectura del modelo en modo gráfico]
+
+Se crea un gráfico que muestra un cuadro para cada capa, con información acerca de las dimensiones de entrada y salida de cada una, y flechas que conectan las capas, mostrando el flujo de los datos a través de la red.
+
+![Figure [res/010_007]: Arquitectura del modelo](res/010_007.png)
+
+Dibujar las curvas de aprendizaje del modelo
+--------------------------------------------------------------
+
+Las curvas de aprendizaje son un gráfico del rendimiento de la red neuronal a lo largo del tiempo, normalmente calculados al final de cada periodo de entrenamiento, o epoch. Ofrecen información detallada sobre las dinámicas de aprendizaje del modelo, como si está aprendiendo bien, si está haciendo underfitting o overfitting,...
+
+Se pueden crear facilmente estas curvas de aprendizaje para un modelo. Primero, hay que actualizar la llamada a la función `fit` para incluir una referencia al conjunto de datos de validación. El conjunto de datos de validación es una porción del conjunto de entrenamiento que no se ha usado para entrenar el modelo, y se usa para evaluar el rendimiento del modelo durante el entrenamiento. Se pueden dividir los datos a mano y darselos al método `fit` a través del parámetro `validation_data`, o se puede usar el parámetro `validation_split` y especificar que porcentaje del conjunto de entrenamiento se va a usar en esta división y dejar a Keras que efectue dicha división.
+
+La función `fit` devuelve un objeto `history` que contiene un registro de las métricas de rendimiento grabadas al final de cada periodo de entrenamiento epoch. Esto incluye la función de perdida elegida y cada métrica configurada, como `accuracy`. Además cada métrica y perdida se calcula tanto para el conjunto de entrenamiento como en el de validación.
+
+Una curva de aprendizaje es una gráfico de la perdida y cualquier métrica en el conjunto de entrenamiento y de validación. Se puede crear este gráfico con matplotlib a partir del objeto `history`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.datasets import make_classification
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import SGD
+import matplotlib.pyplot as plt
+
+X, y = make_classification(n_samples=1000, n_classes=2, random_state=1)
+n_features = X.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(1, activation='sigmoid'))
+
+sgd = SGD(learning_rate=0.001, momentum=0.8)
+model.compile(optimizer=sgd, loss='binary_crossentropy', metrics=['accuracy'])
+
+history = model.fit(X, y, epochs=100, batch_size=32, verbose=0, validation_split=0.3)
+
+fig,ax = plt.subplots()
+plt.style.use('ggplot')
+
+epoch_values = list(range(100))
+ax.plot(epoch_values, history.history['loss'], label='Pérdida de entrenamiento')
+ax.plot(epoch_values, history.history['val_loss'], label='Pérdida de validación')
+ax.plot(epoch_values, history.history['accuracy'], label='Exactitud de entrenamiento')
+ax.plot(epoch_values, history.history['val_accuracy'], label='Exactitud de validación')
+
+ax.set_title('Pérdida y Exactitud de Entrenamiento')
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Pérdida/Exactitud')
+ax.legend()
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [learning_curve]: Visualizar la curva de aprendizaje de un modelo]
+
+Este ejemplo muestra una pequeña red neuronal en un problema de clasificación binario sintético. Se hace una división del 30% para validación. Se dibuja la perdida de `crossentropy` sobre los conjuntos de datos de entrenamiento y validación, así como la métrica de exactitud el modelo para ambos conjuntos de datos. Al final de la ejecución del entrenamiento, se devuelve el objeto `history` y se usa para crear el gráfico. Se accede a la perdida de `crossentropy` a partir de la clave `loss` para el conjunto de entrenamiento, y a la clave `val_loss` para el de validación, y a la clave `accuracy` y `val_accuracy` para los datos acerca de la exactitud.
+
+![Figure [res/010_008]: Curva de aprendizaje del modelo](res/010_008.png)
+
+### Interpretar los gráficos
+
+En el caso de las funciones de perdida loss, suele ser interesante minimizarlas, con lo cual, un valor cercano a 0.0 indica que se ha aprendido perfectamente el conjunto de datos y no se realizan errores. En los ejemplos siguientes se muestran este tipo de curvas, donde puntuaciones bajas en el eje y muestran un entrenamiento mejor.
+
+Si se mira a la curva realizada con el conjunto de entrenamiento se puede observar como de bien está aprendiendo el modelo, mientras que la curva sobre el conjunto de validación da una idea de como de bien está el modelo generalizando.
+
+#### Diagnosticar el comportamiento del modelo
+
+La forma y las dinámicas de una curva de aprendizaje se puede usar para diagnosticar el comportamiento de un modelo y quizás sugerir que tipo de cambios en la configuración se podrían hacer para mejorarlo.
+
+##### Underfitting
+
+El underfitting sucede cuando un modelo no ha podido aprender el conjunto de datos de entrenamiento. Se puede identificar facilmente a través de la curva de perdida del conjunto de entrenamiento. Puede mostrar una línea recta plana o valores con ruido con mucha perdida.
+
+![Figure [res/010_009]: Modelo con underfitting con falta de capacidad](res/010_009.png width="400")
+
+También se puede identificar por una perdida de entrenamiento que está descendiendo hasta el final del gráfico. Esto indica que el modelo es capaz de aprender más y mejorar, pero el proceso se ha interrumpido demasiado pronto.
+
+![Figure [res/010_010]: Modelo con underfitting que necesita más entrenamiento](res/010_010.png width="400")
+
+##### Overfitting
+
+Este efecto sucede cuando un modelo ha aprendido el conjunto de entrenamiento demasiado bien, incluyendo el ruido estadístico o fluctuaciones aleatorias. El problema es que cuanto más especializado se vuelve el modelo con los datos de entrenamiento, peor generaliza para datos nuevos. Este aumento del error en la generalización se puede medir por el rendimiento del modelo sobre el conjunto de validación.
+
+Esto suele ocurrir cuando el modelo tiene más capacidad de la requerida para el problema, y por tanto, demasiada flexibilidad, o si se ha entrenado demasiado tiempo.
+
+Se puede ver en las curvas si, el gráfico de la perdida de entrenamiento sigue decreciendo en el tiempo, o el gráfico de perdida de validación baja a un punto y luego vuelve a subir. El punto de inflexión en la perdida de validación puede ser el punto en el que el entrenamiento se deba parar, puesto que la experiencia tras ese punto muestra las dinámicas de un overfitting.
+
+![Figure [res/010_011]: Modelo con overfitting](res/010_011.png width="400")
+
+##### Good fit
+
+Un buen ajuste es el objetivo de cualquier algoritmo de aprendizaje automático. Se identifica cuando las perdidas de ambos conjuntos bajan hasta un punto de estabilidad con una distancia mínima entre los dos valores de perdida.´
+
+La perdida del modelo casi siempre será menor en el conjunto de entrenamiento que en el de validación, esto significa que suele haber un pequeño hueco entre ambas perdidas, que se llama `generalization gap`.
+
+Hay un buen ajuste si, el gráfico de perdida de entrenamiento baja hasta un punto de estabilidad, o el grafico de la perdida de validación baja hasta un punto de estabilidad y hay un pequeño hueco con la perdida de entrenamiento.
+
+![Figure [res/010_012]: Modelo con buen fit](res/010_012.png width="400")
+
+#### Diagnosticar conjuntos de datos poco representativos
+
+También se pueden usar estos gráficos para diagnosticar las propiedades de los conjuntos de datos, y si son suficientmente representativos.
+
+Un conjunto de datos poco representativo es aquel que no captura las características estadísticas relativas a otro conjunto de datos sobre el mismo dominio, como entre el conjunto de entrenamiento y de validación. Esto suele ocurrir cuando el número de observaciones es demasiado pequeño, relativo al otro conjunto.
+
+##### Conjunto de entrenamiento poco representativo
+
+En este caso, el conjunto de entrenamiento no ofrece suficiente información para aprender el problema, relativo al conjunto de validación usado. Esto suele ocurrir cuando el conjunto de entrenamiento tiene demasiados pocas observaciones respecto al de validación.
+
+Se puede identificar por una curva de perdida de entrenamiento que muestra mejoras y una de validación que también las muestra, pero hay un hueco muy grande entre ambas curvas.
+
+![Figure [res/010_013]: Conjunto de entrenamiento poco representativo](res/010_013.png width="400")
+
+##### Conjunto de validación poco representativo
+
+El conjunto de validación no ofrece la suficiente información para evaluar la capacidad del modelo para generalizar. Por ejemplo, si el conjunto de validación tiene muy pocas observaciones relativas al de entrenamiento.
+
+Se puede identificar porque la curva de perdida de entrenamiento parece tener un buen ajuste (o cualquier ajuste) y la de perdida de validación muestra movimientos con mucho ruido alrededor de la de entrenamiento.
+
+![Figure [res/010_014]: Conjunto de validación poco representativo](res/010_014.png width="400")
+
+También se puede identificar por una perdida de validación que es menor que la de entrenamiento, eso quiere decir que el conjunto de validación ha sido más fácil de predecir que el conjunto de entrenamiento.
+
+![Figure [res/010_015]: Conjunto de validación poco representativo](res/010_015.png width="400")
+
+Guardar y cargar un modelo
+--------------------------------------------------------------
+
+Entrenar y evaluar modelos es el primer paso, pero se suele quere poder usar el modelo más tarde sin tener que volver a entrenarlo cada vez que se quiera usar. Para esto, se puede guardar el modelo a un fichero, para luego poder cargarlo y realizar predicciones.
+
+Existe el método `save` del modelo para ello, y `load` para cargarlo más tarde. El modelo se guarda en formato H5, un formato eficiente de almacenaje de arrays. Para ello hay que tener instalado h5py desde [PyPI](https://pypi.org/project/h5py/).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+model.save('model.h5')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [save_model]: Guardar modelo]
+
+Posteriormente al guardado se puede cargar dicho modelo y usarlo para realizar predicciones, o continuar entrenándolo,...
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from tensorflow.keras.models import load_model
+
+model = load_model('res/model.h5')
+
+row = [1.91518414, 1.14995454, -1.52847073, 0.79430654]
+y_pred = model.predict([row])
+set_printoptions(precision=3)
+print(f'Predicted: {y_pred[0]}')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [load_model]: Cargar modelo y realizar una predicción]
+
+Mejorar el rendimiento
+==============================================================
+
+Gran parte de la posible mejora de los modelos de deep learning suponen evitar el overfitting ralentizando el entrenamiento o parándolo en el momento correcto.
+
+Reducir el overfitting usando dropout
+--------------------------------------------------------------
+
+Droput es un método de regularización que reduce el overfitting del conjunto de entrenamiento y hace al modelo más robusto. Esto se consigue durante el entrenamiento, donde algunas salidas de algunas capas son aleatoriamente ignoradas (dropped out). Esto tiene el efecto de hacer que la capa parezca (y se trate así) como una capa con un número diferente de nodos y conectividad a la capa anterior.
+
+Tiene el efecto de hacer el proceso de entrenamiento ruidoso, forzando a los nodos dentro de una capa a asumir más o menos responsablidad sobre las entredas de manera probabilística.
+
+Se pueden añadir droputs a un modelo como una nueva capa antes de la capa sobre la que se quieren ignorar algunas de sus entradas. Esto supone añadir una capa `Dropout` de `tf.keras` que recibe un argumento que indica la probabilidad de ignorar cada salida de la previa capa. 0.4 significa que el 40% de las entradas se abandonarán en cada actualización del modelo.
+
+Se pueden añadir capas dropout en modelos MLP, CNN y RNN, incluso hay versiones especializadas de droputs para usar con modelos CNN y RNN.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.datasets import make_classification
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dropout
+
+X, y = make_classification(n_samples=1000, n_classes=2, random_state=1)
+n_features = X.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam', loss='binary_crossentropy')
+
+model.fit(X, y, epochs=100, batch_size=32, verbose=0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [dropout]: Capa Dropout en un modelo]
+
+En este ejemplo se muestra un modelo con una capa dropout configurada al 50%, situada entre la primera capa oculta y la capa de salida.
+
+Acelerar el entrenamiento con la normalización de batches
+--------------------------------------------------------------
+
+El escalado y distribución de las entradas a una capa puede tener un gran impacto en como de rápido o facilmente se puede entrenar esa capa. Por eso es buena idea escalar los datos de entrada antes del entrenamiento.
+
+La normalización por batch es una técnica para entrenar redes neuronales que standariza las entradas a una capa para cada mini batch. Esto tiene el efecto de estabilizar el proceso de aprendizaje y reducir dramáticamente el número de ciclos de entrenamiento epochs requeridos.
+
+Se puede usar está técnica simplemente añadiendo una capa de normalización `BatchNormalization` antes de la capa que se quiere que reciba las entradas standarizadas. Se puede usar con modelos MLP, CNN y RNN.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.datasets import make_classification
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import BatchNormalization
+
+X, y = make_classification(n_samples=1000, n_classes=2, random_state=1)
+n_features = X.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(BatchNormalization())
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam', loss='binary_crossentropy')
+
+model.fit(X, y, epochs=100, batch_size=32, verbose=0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [batch_norm]: Capa BatchNormalization en un modelo]
+
+En este ejemplo se muestra un modelo con una capa de normalización de batch, situada entre la primera capa oculta y la capa de salida.
+
+Como parar el entrenamiento en el momento idoneo con early stopping
+--------------------------------------------------------------
+
+Las redes neuronales suelen ser complicadas de entrenar, poco entrenamiento y el modelo muestra uderfitting, demasiado entrenamiento y surge overfittint. En ambos casos, el resultado es el mismo, un modelo menos efectivo de lo que debiera.
+
+Una forma de solucionar esto sería usar una parada anticipada, esto supone monitorizar la perdida en los dos conjuntos de datos, entrenamiento y validación. Tan pronto como la perdida del conjunto de validación empieza a mostrar signos de overfitting, el proceso de entrenamiento se puede parar.
+
+Para que esta técnica funcione el modelo debe ser entrenado con un conjunto de validación, como es habitual. Se puede definir un objeto `EarlyStopping` y decirle sobre que medida de rendimiento tiene que realizar la monitorización, como `val_loss` para la perdida sobre el conjunto de validación, y el número de ciclos de entrenamiento epochs sobre los que observar overfitting antes de tomar alguna acción.
+
+Este objeto se puede pasar a la función `fit` del modelo a través del parámetro `callbacks`, que recibe una lista de callbacks. Esto permite determinar un número de epochs a un número grande y tener la confianza que el entrenamiento acabará tan pronto como el modelo empiece a mostrar overfitting. También suele ser buena idea crear una curva de aprendizaje para descubrir más información acerca de las dinámicas de todo el proceso de entrenamiento y cuando dicho entrenamiento se detuvo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.datasets import make_classification
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.callbacks import EarlyStopping
+
+X, y = make_classification(n_samples=1000, n_classes=2, random_state=1)
+n_features = X.shape[1]
+
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam', loss='binary_crossentropy')
+
+es = EarlyStopping(monitor='val_loss', patience=5)
+
+history = model.fit(X, y, epochs=200, batch_size=32, verbose=0, validation_split=0.3, callbacks=[es])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [batch_norm]: Capa BatchNormalization en un modelo]
+
+En este ejemplo se muestra un modelo que usa early stopping al ver señales de overfitting tras 5 epochs.
+
+Si este modelo se entrena 200 epochs sin early stopping, al visualizar las curvas de aprendizaje se puede ver claramente como el entrenamiento acaba mostrando señales de overfitting.
+
+![Figure [res/010_016]: Entrenamiento con overfitting](res/010_016.png width="400")
+
+En cambio si se activa el early stopping con 5 epochs se puede apreciar como claramente el entrenamiento ha parado antes del ciclo 60 cuando empezaban a diverger las dos curvas.
+
+![Figure [res/010_017]: Entrenamiento con buen fit](res/010_017.png width="400")
+
+<link rel="stylesheet" href="res/md/viu.css">
+<style class="fallback">body{visibility:hidden}</style><script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="res/md/markdeep.min.js?" charset="utf-8"></script>

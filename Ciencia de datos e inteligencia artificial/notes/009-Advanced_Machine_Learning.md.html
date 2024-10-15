@@ -1,0 +1,1244 @@
+<meta charset="utf-8">
+**04EPPY - 009 - Advanced Machine Learning**
+    <small>©2021 VIU - 04EPPY Ciencia de Datos e Inteligencia Artificial - Òscar Garibo</small>
+
+# Comparar modelos de aprendizaje automático
+
+En anteriores entregas se hicieron clasificaciones para predecir  las especies de flores iris desconocidas, se ha probado con varios valores para el número de vecinos usando el clasificador K-Nearest Neighbors, es decir, con el parámetro k = 1, k = 5, e igualmente se hizo con regresión logística, de esta manera, se obtienen tres conjuntos de predicciones, una para cada modelo/conjunto de parámetros. Puesto que estos datos están fuera del conjunto de datos de entrenamiento, no se saben los valores correctos de estas respuestas, y tampoco se puede decidir que modelo hizo las mejores predicciones. Sin embargo, hay que elegir entre uno de esos tres modelos. El objetivo del aprendizaje automático es siempre construir un modelo que generalice para los datos nuevos, lo que se necesita es un procedimiento que permita estimar como es capaz de rendir un determinado modelo con estos nuevos datos. Esto se conoce como procedimiento de evaluación del modelo. Si se puede estimar el rendimiento de los tres modelos anteriores, se puede usar dicho desempeño para elegir entre estos modelos. Hay muchos procedimientos de evaluación distintos, pero hay dos principales.
+
+## Entrenar y probar en el conjunto de datos completo
+
+El primero consiste en entrenar y probar en el conjunto de datos completo. La idea es simple, se entrena el modelo con el conjunto de datos completo, y se prueba el modelo verificando como de bien funciona con los mismos datos. Esto parece resolver el problema inicial, que era que se hacían algunas predicciones, pero no se podía verificar si esas predicciones eran correctas. Probando el modelo en un conjunto de datos para el cual se tienen todos los valores de respuesta correctos, se puede verificar como de bien lo está haciendo el modelo, comparando los valores de la respuesta predicha contra los valores de respuesta correctos.
+
+Se cargan los datos del conjunto de iris, y se crea la matriz de features X y el vector de respuesta y.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.datasets import load_iris
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [load_iris]: Cargar iris y crear X e y]
+
+Primero se evalúa la regresión logística, se sigue el patrón habitual, importar la clase, instanciar el modelo y ajustarlo con los datos de entrenamiento. Entonces se hacen las predicciones pasando la matriz completa de features X, al método `predict` del modelo ajustado e imprimiendo dichas predicciones.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.linear_model import LogisticRegression
+
+logreg = LogisticRegression(solver='liblinear')
+logreg.fit(X, y)
+logreg.predict(X)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [entire_logreg]: Regresión lineal sobre todas las features X]
+
+Se guardan fichas predicciones en un objeto llamado `y_pred`, se tienen 150 predicciones, lo cual es lo esperado, una predicción para cada observación.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_pred = logreg.predict(X)
+len(y_pred)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [entire_predict]: Predicción para todas las features X]
+
+El método más obvio para evaluar como de bien ha sido entrenado el modelo sería la precisión de la clasificación (classification accuracy). Que es la proporción de predicciones correctas. Ésta es una de las métricas de evaluación, de las cuales existen muchas. Se calcula la classification accuracy para el modelo de regresión logística.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn import metrics
+print(metrics.accuracy_score(y, y_pred))
+
+Output:
+0.96
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [entire_accuracy_score]: Classification accuracy para el modelo]
+
+Se usa el módulo `metrics` de scikitlearn, se importa dicho módulo, y se usa la función `accuracy_score`, donde se le pasan los valores correctos y luego los predichos. Devuelve un valor de 0.96, eso significa que se han comparado los 150 valores correctos contra los 150 valores predichos, y se ha calculado que el 96% de dichas predicciones han sido correctas. Esto se conoce como la precisión del entrenamiento, training accuracy, puesto que se prueba el modelo en los mismos datos que se usan para entrenar el modelo.
+
+Ahora se puede intentar usar K-Nearest Neighbors, con el valor para k=5. Se importa la clase, se instancia el modelo usando el argumento `n_neighbors=5`, se ajusta con los datos de entrenamiento, se hacen predicciones sobre los mismos datos y se calcula el classification accuracy.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X, y)
+y_pred = knn.predict(X)
+print(metrics.accuracy_score(y, y_pred))
+
+Output:
+0.9666666666666667
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [entire_knn5]: Classification accuracy para el modelo KNN (k=5)]
+
+Esta vez se obtiene un valor de 0.967, lo cual es un poco mejor que la regresión logística. Finalmente, se prueba otra vez KNN, pero con el valor de k=1.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+knn = KNeighborsClassifier(n_neighbors=1)
+knn.fit(X, y)
+y_pred = knn.predict(X)
+print(metrics.accuracy_score(y, y_pred))
+
+Output:
+1.0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [entire_knn1]: Classification accuracy para el modelo KNN (k=1)]
+
+Esta vez se obtiene una puntuación de 1.0, es decir, una precisión del 100%. Este modelo ha funcionado mejor que los otros dos modelos, se podría concluir que KNN con k=1, es el mejor modelo para usar con estos datos.
+
+Pero si se piensa en como funciona el modelo KNN el asunto no está tan claro. Para hacer una predicción, busca por las k observaciones en el conjunto de datos de entrenamiento con el valor para la feature más cercana, hace recuento de los valores de respuesta de esas observaciones cercanas, y se usa como respuesta de predicción el valor más popular. Con eso en mente, se puede razonar porque un modelo KNN con k=1 siempre tendrá un 100% de precisión con este método de entrenamiento. Para hacer una predicción para cualquier observación en el conjunto de datos, KNN buscará por solo una observación, la más cercana en el conjunto de entrenamiento, y encontrará esa misma observación. En otras palabras, KNN ha memorizado el conjunto de datos y puesto que se está probando sobre exactamente los mismos datos siempre hará predicciones correctas.
+
+En este punto, se puede concluir, que entrenar y probar los modelos en el mismo conjunto de datos no es un método útil para decidir que modelo usar. El objetivo es estimar como de bien puede funcionar un modelo sobre datos nuevos, es decir, futuras observaciones, sobre las cuales no se conocen los valores de respuesta correctos. Si se intenta maximizar la precisión del entrenamiento, entonces se está recompensando modelos complejos que quizás no generalicen bien. En otras palabras, modelos con una precisión de entrenamiento muy alta, quizás no lo hagan muy bien haciendo predicciones sobre datos nuevos.
+
+Crear un modelo innecesariamente complejo se conoce como overfitting. Los modelos que hacen overfit han aprendido el ruido en los datos, más que la señal. En el caso de KNN, un valor muy bajo de k, crea un modelo de alta complejidad, puesto que sigue el ruido de los datos.
+
+![Figure [res/009_000]: Overfitting](res/009_000.png)
+
+En Figure [res/009_000] se puede apreciar el overfitting claramente. Cada punto representa una observación, la localización en x e y representan los valores de las features, y el color representa la clase de respuesta. Para un problema de clasificación, se quiere que el modelo aprenda que de manera general, los puntos por encima de la curva negra son de la clase azul, y por debajo sean rojos. Se quiere que el modelo aprenda que la línea negra, conocida también como decision boundary, sea un buen límite para clasificar futuras observaciones, sean rojas o azules. No hace un trabajo perfecto clasificando las observaciones de entrenamiento, pero parece que haría un buen trabajo clasificando datos nuevos. En cambio, un modelo que aprenda la línea verde como decision boundary, está ajustando demasiado a los datos, está haciendo overfitting. Hace un trabajo perfecto clasificando las observaciones de entrenamiento, pero cuando clasifique datos nuevos, no lo hará tan bien como la curva negra. La línea verde ha aprendido el ruido en los datos, mientras que la curva negra ha aprendido la señal.
+
+## Train test split
+
+Este procedimiento también se llama aproximación de conjunto de pruebas o validación. Primero, se dividen los datos en dos trozos, que se llaman conjunto de entrenamiento y de pruebas. Se entrena el modelo sobre el conjunto de entrenamiento, y luego se prueba el modelo sobre el conjunto de pruebas, para evaluar como de bien se ha hecho. La idea clave es que puesto se está evaluando el modelo sobre datos que no se han usado para entrenar el modelo se está simulando de manera más precisa como de bien un modelo va a funcionar en datos nuevos.
+
+Se aplica este método sobre el conjunto de datos iris, el primer paso es recordar las dimensiones de X e y. X es la matriz de features, hecha de 150 filas representando las observaciones y 4 columnas para las features. Y es el vector de respuestas, el target, que contiene 150 valores de respuestas. Par dividir los datos en los conjuntos de entrenamiento y pruebas, se la función `train_test_split` de scikitlearn, se importa y se usa para dividir los objetos X e y, en dos trozos cada uno de ellos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_iris]: Train test split sobre Iris]
+
+Es importante entender lo que está sucediendo. En Figure [res/009_001] se puede ver un diagrama de ejemplo, con 5 observaciones, 2 features y un valor de respuesta. El valor de respuesta es numérico, es un problema de regresión. La matriz X de features es 5 filas por 2 columnas, y el vector y de target tiene 5 valores. Si se ejecuta la función `train_test_split` sobre X e y, dividirá X en X_train y X_test, que están en amarillo y azul, y dividirá y en y_train y y_test, en naranja y morado. Ahora se tiene una matriz de features X_train de tamaño 3x2, y un vector de targets y_train de tamaño 3, y se pueden usar dichos objetos para entrenar el modelo. Entonces, se pueden hacer predicciones sobre x_test y comparar dichas predicciones a los valores reales de respuesta en y_test, para calcular lo que se conoce como testing accuracy, o precisión de validación. Puesto que se está entrenando y probando el modelo sobre diferentes conjuntos de datos, la precisión resultante es una estimación mejor de como de bien el modelo funcionará con datos futuros.
+
+![Figure [res/009_001]: Train test split](res/009_001.png)
+
+La pregunta obvia es como este método `train_test_split` decide qué observaciones y cuantas son asignadas al conjunto de entrenamiento o al conjunto de pruebas. El parámetro opcional `test_size` determina la proporción de observaciones asignadas al conjunto de pruebas. En este caso, se han asignado el 40% de ellas al conjunto de pruebas, lo que significa que el 60% serán asignadas al conjunto de entrenamiento. No hay una regla general acerca de que porcentaje es mejor, pero se suele usar entre el 20% y el 40% de los datos para pruebas. Acerca de como se hace la asignación de las observaciones, suele ser un proceso aleatorio. Si se ejecuta esta función varias veces en el mismo conjunto de datos, cada vez se dividirá de manera distinta. Sin embargo, existe un parámetro opcional `random_state`, que recibe un valor entero, que dividirá los datos de la misma manera cada vez.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(X_train.shape)
+print(X_test.shape)
+
+print(y_train.shape)
+print(y_test.shape)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_shape]: Dimensiones de los dos conjuntos de datos]
+
+Se verifica que los tamaños de los cuatro objetos coinciden con las expectativas, la matriz X original de 150x4 ha sido dividida en dos trozos, X_train es de tamaño 90x4, y X_test 60x4. El vector target original y de tamaño 150, ha sido dividido en dos trozos, y_train de tamaño 90, y y_test de 60.
+
+Ahora hay que entrenar el modelo con el conjunto de entrenamiento. Se instancia un modelo de regresión logística y se ajusta sobre X_train y y_train.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+logreg = LogisticRegression(solver='liblinear')
+logreg.fit(X_train, y_train)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_logreg]: Entrenar regresión logística]
+
+Se realizan predicciones para las observaciones en el conjunto de pruebas, pasando X_test al método `predict`, y se almacenan los resultados en `y_pred`. Puesto que se saben los valores de respuesta correctos para el conjunto de entrenamiento, se pueden comparar los valores predichos contra los reales almacenados en `y_test`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_pred = logreg.predict(X_test)
+print(metrics.accuracy_score(y_test, y_pred))
+
+Output:
+0.9333333333333333
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_logreg_predict]: Predecir regresión logística]
+
+Este modelo obtiene una testing accuracy de 0.93. Se repiten los pasos anteriores para KNN, primero con el valor de k=5.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(metrics.accuracy_score(y_test, y_pred))
+
+Output:
+0.9666666666666667
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_knn5]: Predecir KNN (k=5)]
+
+En este caso se obtiene una precisión de 0.96.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+knn = KNeighborsClassifier(n_neighbors=1)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(metrics.accuracy_score(y_test, y_pred))
+
+Output:
+0.95
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_knn1]: Predecir KNN (k=1)]
+
+Y para k=1 se obtiene una precisión de 0.95. Se puede, por tanto, concluir que entre estos tres modelos, KNN con k=5 parece ser el mejor modelo para realizar predicciones sobre nuevos valores.
+
+Naturalmente, se puede intentar encontrar un valor aún mejor para k. Se escribe un bucle para ello, en cada iteración se prueba el algoritmo para cada valor de k, desde 1 hasta 25, y se almacena el testing accuracy para cada prueba de KNN en una lista llamada `scores`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+k_range = list(range(1, 26))
+scores = []
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
+    scores.append(metrics.accuracy_score(y_test, y_pred))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_knn_loop]: Probar KNN con varios valores de k]
+
+A continuación se puede usar matplotlib para representar la relación entre el valor de k y la precisión de testing accuracy.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.plot(k_range, scores)
+ax.set_xlabel('Value of K for KNN')
+ax.set_ylabel('Testing Accuracy')
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_knn_plot]: Generar gráfico de k vs testing accuracy]
+
+En general, al aumentar el valor de k, parece que hay una mejora en testing accuracy, y luego una caída. Esta subida y bajada es bastante típica cuando se examina la relación entre la complejidad del modelo y la precisión, en este caso, testing accuracy. La precisión de entrenamiento, training accuracy, aumenta a la vez que lo hace la complejidad del modelo, que para KNN viene determinado por el valor de k. Por otra parte, la precisión de pruebas, testing accuracy, penaliza los modelos demasiado complejos, así como los modelos que no son lo suficientemente complejos. Así pues, se obtendrá una testing accuracy máxima cuando el modelo tiene el grado de complejidad correcto, en este caso, eso sucede para valores de k desde 6 hasta 17. Se podría pensar que un valor en este rango sería mejor que un valor de 5 para k, pero, este conjunto de datos es tan pequeño y la tarea de clasificación es tan sencilla, que es complicado asegurar que el comportamiento mostrado en esa representación pueda generalizar lo suficiente. En cualquier caso, representar gráficamente la precisión de las pruebas, testing accuracy contra la complejidad del modelo es una manera muy útil de ajustar cualquier parámetro relativo a la complejidad del modelo.
+
+![Figure [res/009_002]: Relación entre k y testing accuracy](res/009_002.png)
+
+Una vez se ha elegido un modelo y sus parámetros óptimos, y está listo para realizar predicciones sobre nuevas observaciones, es importante volver a entrenar el modelo con todos los datos posibles de entrenamiento. De otra manera, se estarían desaprovechando valiosos datos de entrenamiento. En este caso, se elige un valor de 11 para k, puesto que está a mitad camino en el rango con el mayor testing accuracy, y podría generar el mejor modelo. Se instancia el modelo KNN con n_neighbors=11, se ajusta el modelo con X e y, y se usa el modelo para realizar predicciones.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+knn = KNeighborsClassifier(n_neighbors=11)
+knn.fit(X, y)
+knn.predict([[3, 5, 4, 2]])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [tts_knn_predict]: Entrenar el modelo final]
+
+El procedimiento de `train_test_split` también tiene sus inconvenientes. Resulta que produce una estimación sobre la precisión de las muestras con mucha varianza, es decir, puede cambiar mucho en función de las observaciones que se encuentran en el conjunto de entrenamiento en comparación con el conjunto de pruebas. Pero es un método muy util dada su flexibilidad y velocidad.
+
+## Métricas de evaluación de modelos para regresión
+
+La regresión es un tipo de aprendizaje supervisado en el cual el objetivo es predecir una respuesta continua. Para estudiar las métricas relativas a estos modelos se va a usar un nuevo conjunto de datos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import pandas as pd
+data = pd.read_csv('res/advertising.csv', index_col=0)
+data.head()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_load]: Cargar fichero de datos]
+
+En dicho conjunto de datos se puede observar que existen 3 features, y 1 target. La primera columna, TV, muestra la cantidad de publicidad en miles de dolares gastados en publicidad en TV para anunciar un solo producto en un mercado o ciudad, la segunda columna expresa lo mismo para la radio, y la tercera para los periódicos. En el mercado con índice 1, se gastaron 230.1 miles de dolares en publicidad en TV, 37.8 en radio y 69.2 en periódicos. La columna de Sales, representa las ventas del producto que se anuncia en ese mercado en miles de unidades. En el mismo mercado 1, se vendieron una cantidad de 22.1 miles de unidades. El objetivo, por tanto, es tratar de predecir las ventas basándose en el dinero gastado en publicidad.
+
+Visualizando la relación entre cada una de las features y la variable de respuesta, se puede observar que hay una relación lineal entre TV y Sales, cuando la publicidad en TV aumenta, lo hacen de manera más o menos lineal las ventas. Y esta relación parece menos fuerte para radio y aún más débil para los periódicos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import seaborn as sns
+sns.pairplot(data, x_vars=['TV','Radio','Newspaper'], y_vars='Sales', height=7, aspect=0.7, kind='reg')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_pariplot]: Gráfico con las relaciones entre las variables]
+
+![Figure [res/009_003]: Relación entre las variables](res/009_003.png)
+
+Para realizar el entrenamiento hay que definir la matriz de features X y el vector target y.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+feature_cols = ['TV', 'Radio', 'Newspaper']
+X = data[feature_cols]
+X = data[['TV', 'Radio', 'Newspaper']]
+
+y = data['Sales']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_xy]: Features y target]
+
+El paso final antes de realizar el entrenamiento es dividir X e y en los conjuntos de entrenamiento y de pruebas para realizar correctamente la evaluación del modelo. Para ello se usa la función `train_test_split`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_split]: División entre conjunto de entrenamiento y pruebas]
+
+Para realizar el entrenamiento, se sigue el patrón de importar el modelo, instanciarlo y luego ajustarlo a los datos de entrenamiento. En este caso, el modelo aprende a interceptar los coeficientes de la linea de mejor ajuste, luego, tiene una sencilla fórmula para realizar predicciones.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.linear_model import LinearRegression
+linreg = LinearRegression()
+linreg.fit(X_train, y_train)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_train]: Entrenamiento de regresión lineal]
+
+El modelo de regresión lineal es altamente interpretable. Se puede imprimir la intersección (intercept) y los coeficientes.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(linreg.intercept_)
+print(linreg.coef_)
+print(list(zip(feature_cols, linreg.coef_)))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_intercept]: Intersección y coeficientes de regresión lineal]
+
+Estos dos atributos se almacenan dentro del objeto `linreg`, y llevan una barra baja final, lo que es una convención de scikitlearn, para indicar que son atributos que se han estimado a partir de los datos. Los coeficientes se almacenan en el mismo orden en el que estaban las features en la matriz X, así que se puede generar una lista de tuplas con el nombre de cada feature y su coeficiente asociado.
+
+La fórmula resultante para estos valores con la regresión lineal es la siguiente:
+
+$$y = 2.88 + 0.0466 \times TV + 0.179 \times Radio + 0.00345 \times Newspaper$$
+
+Esta fórmula permite introducir valores para el gasto en publicidad en los 3 medios para un mercado, y obtener una predicción de la cantidad de ventas, la variable y.
+
+El coeficiente para TV es 0.046, significa que para un gasto en publicidad dado de radio y periódicos, un incremento en una unidad en publicidad en TV está asociado con un aumento en las ventas de 0.046 unidades. Esto tiene sentido mirando a la formula, puesto que incrementar TV en 1, incrementará la variable y en 0.046. Sin embargo, hay que tener en cuenta que una unidad de publicidad representa mil dolares y una unidad de ventas, representa mil unidades. Así pues, una interpretación más clara, sería que un incremento en mil dolares en publicidad en TV se asocia con un incremento en las ventas de 46.6 unidades. Esto mismo aplica para los coeficientes de radio y periódicos.
+
+Es importante dejar claro que esto no es una afirmación de causalidad, sino de asociación. Es un problema difícil determinar la causalidad, puesto que supondría tener acceso a todos los posibles factores que puedan haber influido en las ventas, mientras que se tienen solo los del gasto en publicidad. Por eso, las técnicas de aprendizaje automático se suelen centrar en probar la asociación, pero no la causalidad. Por otro lado, los coeficientes pueden ser negativos, por ejemplo, si un incremento en la publicidad en TV se asociara con un decremento en las ventas.
+
+Se usa el modelo para realizar predicciones sobre el conjunto de pruebas, y se almacenan en `y_pred`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_pred = linreg.predict(X_test)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_pred]: Predicciones de regresión lineal]
+
+Anteriormente se usaba la precisión de la clasificación, classification accuracy, como la métrica de evaluación, pero esta no es relevante para los problemas de regresión, puesto que estos problemas tienen respuestas continuas.
+
+Se crean a mano algunas predicciones numéricas de muestra, y se van a evaluar usando una métrica determinado, para ver como funcionan dichas métricas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+true = [100, 50, 30, 20]
+pred = [90, 50, 50, 30]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_sample]: Predicciones de regresión lineal a mano]
+
+Se crean cuatro valores reales artificiales, que correspondan con otros valores predichos igualmente artificiales.
+
+### Mean Absolute Error
+
+La métrica más simple es MAE, Mean Absolute Error, o error absoluto medio. Es la media del valor absoluto de los errores.
+
+$$\frac 1n\sum_{i=1}^n|y_i-\hat{y}_i|$$
+
+El error es la diferencia entre los valores reales y los predichos. Así pues, si se quisiera calcular esta métrica MAE a mano, se sumarían los errores, '10 + 0 + 20 + 10 = 40', y se dividiría por 4. Scikitlearn puede realizar este cálculo usando la función `mean_absolute_error` del módulo `metrics`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print((10 + 0 + 20 + 10)/4.)
+
+from sklearn import metrics
+mae = metrics.mean_absolute_error(true, pred)
+print(mae)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_mae]: Mean Absolute Error]
+
+En este caso, MAE es 10, lo que se puede interpretar como el error medio.
+
+### Mean Squared Error
+
+MSE, Mean Squared Error, o error cuadrático medio, es muy similar a MAE, excepto que los errores están al cuadrado.
+
+$$\frac 1n\sum_{i=1}^n(y_i-\hat{y}_i)^2$$
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print((10**2 + 0**2 + 20**2 + 10**2)/4.)
+
+mse = metrics.mean_squared_error(true, pred, squared=True)
+print(mse)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_mse]: Mean Squared Error]
+
+En este caso, MSE es 150.
+
+### Root Mean Squared Error
+
+RMSE, Root Mean Squared Error, o raíz del error cuadrático medio, es idéntico al anterior, excepto que se toma la raíz cuadrada al final de los cálculos.
+
+$$\sqrt{\frac 1n\sum_{i=1}^n(y_i-\hat{y}_i)^2}$$
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+import numpy as np
+print(np.sqrt((10**2 + 0**2 + 20**2 + 10**2)/4.))
+
+rmse = metrics.mean_squared_error(true, pred, squared=False)
+print(rmse)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_rmse]: Root Mean Squared Error]
+
+En este caso, RMSE es 12.2, y es un poco más alto que el MAE, puesto que RMSE eleva al cuadrado los errores, y por tanto, aumenta el peso de los errores más grandes. En scikitlearn se usa la misma función `mean_squared_error`, pero recibe el parámetro `squared` a False.
+
+Comparando las métricas, MAE es la más sencilla de entender- MSE es más popular, puesto que penaliza los errores grandes y suele ser habitual en los casos reales donde minimizar los errores grandes sea más importante que minimizar los errores pequeños. Pero RMSE es aún más popular, puesto que es interpretable con las unidades en y. MSE en este ejemplo era 150, mientras que RMSE era 12.2, lo cual es mucho más sencillo de poner en contexto, puesto que son las mismas unidades que la variable de respuesta. Por lo tanto, suele ser habitual elegir RMSE como métrica de evaluación para problemas de regresión.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(metrics.mean_squared_error(y_test, y_pred, squared=False))
+
+Output:
+1.4046514230328961
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_rmse1]: Root Mean Squared Error para el ejemplo]
+
+En el caso de ejemplo, RMSE es 1.40, lo cual parece bastante bueno, dado que las ventas tienen un rango entre 5 y 25.
+
+Los problemas de regresión lineal no tienen ningún parámetro de ajuste, pero `train_test_split` puede ayudar a elegir entre features. Al visualizar los datos anteriormente, se veía que la feature de los periódicos parecía tener una correlación muy débil con las ventas. Se puede eliminar esta feature del modelo y ver como afecta a RMSE.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+feature_cols = ['TV', 'Radio']
+X = data[feature_cols]
+y = data.Sales
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+linreg.fit(X_train, y_train)
+y_pred = linreg.predict(X_test)
+
+print(metrics.mean_squared_error(y_test, y_pred, squared=False))
+
+Output:
+1.387903469938289
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [lreg_rmse2]: Root Mean Squared Error eliminando feature de periódicos]
+
+En este caso, RMSE vale 1.38, es decir, un pequeño decremento del modelo anterior. Al contrario de classification accuracy en el cual, números más altos son mejores, los errores son algo que se tiene que minimizar, con lo cual, valores menores para RMSE son mejores. Así pues, el modelo nuevo, que excluye la feature de los periódicos, funciona un poco mejor que cuando estaba incluida, indicando que dicha feature debería quedarse fuera del modelo. Se podría repetir este proceso con combinaciones diferentes de features, y seleccionar la mejor combinación con el RMSE menor como la mejor combinación para usarla en ese problema particular.
+
+# Cross validation
+
+Al usar el método `train_test_split` se pudo observar que el mayor problema de esta aproximación es que la precisión de testing accuracy es una estimación de las muestras con mucha varianza, es decir, puede cambiar mucho en función de las observaciones que se encuentran en el conjunto de entrenamiento en comparación con el conjunto de pruebas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=4)
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(metrics.accuracy_score(y_test, y_pred))
+
+Output:
+0.9736842105263158
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_load]: Precisión de KNN con k=5]
+
+Si se ejecuta este mismo código cambiando el parámetro `random_state` para que cada vez realice la división entre el conjunto de entrenamiento y el de pruebas de manera distinta, se puede observar como el testing accuracy va cambiando cada vez.
+
+Se podría pensar que se puede resolver este problema creando un montón de diferentes divisiones, calcular el testing accuracy para cada uno de ellos y obteniendo la medio de todos ellos, para reducir la varianza. Esa es la esencia de como funciona el método de cross validation.
+
+El tipo más común para realizar cross validation es el llamado K-Fold Cross Validation.
+
+1. Se elige un número para K, y se divide el conjunto de datos completo en K particiones de idéntico tamaño, a estas particiones se les conoce como Folds. Si el valor de K fuera 5 y el conjunto de datos tuviera 150 observaciones, cada uno de los 5 folds tendría 30 observaciones
+
+2. Se asignan a las observaciones del primer fold como el conjunto de pruebas, y la unión de todos los otros folds como el conjunto de entrenamiento. En este ejemplo, el conjunto de pruebas tendrá 30 observaciones del fold 1, y el conjunto de entrenamiento tendrá 120 observaciones de los folds, 2,3,4 y 5
+
+3. Se entrena el modelo sobre el conjunto de entrenamiento, se hacen predicciones sobre el conjunto de pruebas, y se calcula el testing accuracy
+
+4. Se repiten los pasos 2 y 3, K veces, usando un fold diferente como conjunto de pruebas cada vez. Puesto que K vale 5 en este ejemplo, se repetirá este proces 5 veces, para la segunda iteración, el fold 2 será el conjunto de pruebas y la unión de los folds 1,3,4 y 5 serán el conjunto de entrenamiento. Para la tercera iteración, el fold 3 será el conjunto de pruebas, y los folds 1,2,4 y 5 serán los conjuntos de entrenamiento. Y así consecutivamente.
+
+5. Se hace la media de testing accuracy, también conocido como cross validated accuracy, y se usa como la estimación de la precisión para los datos nuevos
+
+![Figure [res/009_004]: K-Fold Cross Validation](res/009_004.png)
+
+En Figure [res/009_004] se puede observar dicho proceso, como se puede observar, cada fold es usado como conjunto de pruebas en una iteración y es parte del conjunto de entrenamiento para las otras 4 iteraciones. Hay que tener claro que se están dividiendo las observaciones en folds, no las features.
+
+Se pueden realizar estas divisiones de folds para poder visualizarlas y entenderlas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import KFold
+kf = KFold(n_splits=5, shuffle=False).split(range(25))
+
+print('{} {:^61} {}'.format('Iteration', 'Training set observations', 'Testing set observations'))
+for iteration, data in enumerate(kf, start=1):
+    print('{:^9} {} {:^25}'.format(iteration, data[0], str(data[1])))
+
+Output:
+Iteration                   Training set observations                   Testing set observations
+    1     [ 5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]        [0 1 2 3 4]
+    2     [ 0  1  2  3  4 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]        [5 6 7 8 9]
+    3     [ 0  1  2  3  4  5  6  7  8  9 15 16 17 18 19 20 21 22 23 24]     [10 11 12 13 14]
+    4     [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 20 21 22 23 24]     [15 16 17 18 19]
+    5     [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19]     [20 21 22 23 24]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_fold]: Divisiones para 5 folds]
+
+Se simula un conjunto de datos de 25 elementos, de 0 a 24, y se quiere usar un 5-Fold Cross Validation. El conjunto de datos quedará dividido como se en la salida, cada línea es una iteración de cross validation, en la cual, el conjunto de datos se divide en conjunto de entrenamiento y pruebas. Para cada iteración, se pueden observar los ids de 20 observaciones en el conjunto de entrenamiento, y los ids de 5 observaciones en el conjunto de pruebas. Para cada iteración, cada observación está o bien en el conjunto de entrenamiento o en el conjunto de pruebas, pero no en ambos. Y cada observación está en el conjunto de pruebas exactamente una vez.
+
+Comparando cross validation con el método train test split, la principal razón para preferir el primero es que éste genera una estimación más precisa de la precisión para datos nuevos, que es lo que se necesita para elegir el mejor modelo. También usa los datos con más eficiencia, puesto que cada observación se usa para entrenar y probar el modelo. Sin embargo, hay dos ventajas en usar train test split, la primera es que se ejecuta K veces más rápido, puesto que k-fold cross validation basicamente repite el proceso de train test split K veces. Esto es una consideración importante para conjuntos de datos muy grandes, que tardan mucho tiempo durante el entrenamiento. Y la segunda, es que es mucho más sencillo examinar los resultados detallados del proceso de pruebas. Scikitlearn hace que realizar cross validation sea muy sencillo, pero todo lo que se obtiene de vuelta son los resultados de la puntuación. Esto hace complicado inspeccionar los resultados usando una matriz de confusión o una curva ROC, que son herramientas habituales para la evaluación de modelos, mientras que con train test split, es facil examinar estos resultados.
+
+Hay un par de recomendaciones a tener en cuenta a la hora de usar cross validation.
+
+1. Se ha estado usando 5 como valor de K para los ejemplos, pero se puede usar cualquier número. Sin embargo, un valor de 10 para K suele ser lo recomendable, puesto que se ha demostrado experimentalmente que produce las estimaciones más fiables para la precisión de datos nuevos.
+
+2. Cuando se usa cross validation para problemas de clasificación, se recomienda usar un muestreado estratificado, stratified sampling, para crear los folds. Esto significa que cada clase en el target de respuesta debería ser representada en proporciones aproximadamente iguales en cada uno de los folds. Por ejemplo, si el conjunto de datos tiene dos clases target, A y B, y el 25% de las observaciones son de la clase A, entonces cada fold de cross validation, debería contener aproximadamente el 25% de la clase A. Afortunadamente, scikitlearn usa esta técnica por defecto al usar la función `cross_val_score`, así que no hay que preocuparse de implementarlo.
+
+
+## Ajuste de parámetros
+
+Se usa el conjunto de datos iris y el objetivo, en este caso, es seleccionar los mejores parámetros de afinado o tuning, también llamados hyperparámetros, para el modelo de clasificación KNN. Dicho de otra manera, se quieren seleccionar los parámetros para KNN que produzcan el modelo que mejor generalice para nuevas observaciones. Se centrará el trabnajo en el ajuste del parámetro K para KNN, que representa el número de vecinos cercanos que se tiene en cuenta a la hora de realizar una predicción. Este parámetro K no tiene nada que ver con el parámetro K en K-Fold Cross Validation.
+
+La función principal para realizar cross validation en scikitlearn es `cross_val_score`, que se importa del módulo `model_selection`. Se va a intentar sobre el valor 5 de K para KNN, se instancia el modelo de clasificador de KNN con el parámetro `n_neighbors` a ese valor y se guarda el modelo en una variable llamada `knn`. Y se usa la función `cross_val_score` que recibe 5 parámetros.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import cross_val_score
+
+knn = KNeighborsClassifier(n_neighbors=5)
+scores = cross_val_score(knn, X, y, cv=10, scoring='accuracy')
+print(scores)
+
+Output:
+[1.   0.93333333   1.   1.   0.86666667   0.93333333   0.93333333   1.   1.   1.]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_knn]: Cross validation de KNN con k=5]
+
+El primer parámetro es el objeto del modelo `knn`, los dos siguientes son X e y, la matriz de features y el vector target, es imporante tener en cuenta que se pasan los conjuntos de datos enteros. Esta función ya se encarga de realizar la división de los datos en folds, y por tanto, no hay que realizar la división manualmente usando `train_test_split`. El cuarto parámetro es `cv`, en este caso recibe el valor 10, e indica en cuantos folds se quiere realizar cross validation, en este caso se usa 10-Fold Cross Validation. El parámetro final es `scoring`, en este caso recibe el valor `accuracy`, es decir, se quiere usar classification accuracy como métrica de evaluación. Hay muchas métricas de evaluación posibles, suele ser recomendable especificar de manera explícita cual se quiere usar. La lista completa se puede ver en la documentación de scikitlearn.
+
+La función `cross_val_score` ejecuta los primeros 4 pasos de K-Fold Cross Validation, divide X e y en 10 folds iguales, entrena el modelo `knn` con la unión de los folds 2 a 10, prueba el modelo con el fold 1, y calcula el testing accuracy. Luego entrena el modelo `knn` con los folds 1 y del 3 al 10, lo prueba con el fold 2, y calcula el testing accuracy. Y hará esto mismo 8 veces más. Cuando ha acabado, devuelve un ndarray de NumPy como un objeto `scores`, que en este ejemplo se imprime. Durante la primera iteración el modelo ha alcanzado un testing accuracy del 100%, en la segunda del 93%,... Se suele sacar la media de testing accuracy para las 10 iteraciones, y se usa dicho valor como estimación de la precisión para nuevos datos. Los ndarrays de NumPy tienen un método llamado `mean` para calcular su media.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(scores.mean())
+
+Output:
+0.9666666666666668
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_knn_mean]: Media de testing accuracy para cross validation de KNN con k=5]
+
+En este caso se obtiene una media de 96.6%, y puesto que se ha usado cross validation para llegar a este resultado, se tiene más confianza en que sea una estimación más certera que si se hubiera usado solo train test split.
+
+En realidad, el objetivo era encontrar un valor óptimo de K para KNN usando el parámetro n_neighbors. Con lo cual, se va a revisar un rango de valores razonables para K, y para cada valor usar 10-Fold Cross Validation para estimar la precisión. Se crea una lista de enteros de 1 a 30, que son los valores para los que se probará el parámetro `n_neighbors`. Se crea una lista vacia `k_scores`, que contendrá las 30 puntuaciones para cada valor de K. Se usa un bucle para iterar sobre los valores de 1 a 30, para cada iteración se instancia un clasificador `knn` con el parámetro `n_neighbors` igual al que corresponde a la iteración del bucle, se ejecuta un 10-fold cross validation con ese modelo, y finalmente se añade la precisión media a la lista `k_score`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+k_range = list(range(1, 31))
+k_scores = []
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    scores = cross_val_score(knn, X, y, cv=10, scoring='accuracy')
+    k_scores.append(scores.mean())
+print(k_scores)
+
+Output:
+
+[0.96, 0.9533333333333334, 0.9666666666666666, 0.9666666666666666, 0.9666666666666668,
+0.9666666666666668, 0.9666666666666668, 0.9666666666666668, 0.9733333333333334,
+0.9666666666666668, 0.9666666666666668, 0.9733333333333334, 0.9800000000000001,
+0.9733333333333334, 0.9733333333333334, 0.9733333333333334, 0.9733333333333334,
+0.9800000000000001, 0.9733333333333334, 0.9800000000000001, 0.9666666666666666,
+0.9666666666666666, 0.9733333333333334, 0.96, 0.9666666666666666, 0.96,
+0.9666666666666666, 0.9533333333333334, 0.9533333333333334, 0.9533333333333334]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_knn_tuning]: Media de testing accuracy para cross validation de KNN para cada k]
+
+Se realiza un gráfico con dicha lista, con una línea, para ver los cambios en la precisión al variar el número en K.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+fig, ax = plt.subplots()
+ax.plot(k_range, k_scores)
+ax.set_xlabel('Value of K for KNN')
+ax.set_ylabel('Cross-Validated Accuracy')
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_knn_plot]: Generar gráfico con la media de testing accuracy para cross validation de KNN para cada k]
+
+La precisión máxima para cross validation sucede en valores entre 13 y 20 para K.
+
+![Figure [res/009_005]: Imagen Inserted](res/009_005.png)
+
+La forma general de la curva es una U invertida, que es muy típica al examinar la relación entre un parámetro para la complejidad de un modelo contra la precisión de dicho modelo. Este es un ejemplo de la compensación del varianza de sesgo, en el cual, valores bajos de K producen un modelo con poco sesgo, pero alta varianza, y valores altos de K, producen un modelo con mucho sesgo, pero poca varianza. El mejor modelo suele encontrarse en el medio, puesto que balancea apropiadamente el sesgo y la varianza, y es más probable que generalice mejor para los nuevos datos. A la hora de decidir que valor exacto de K es mejor, se suele recomendar usar el valor que produce el modelo más simple. En el caso de KNN, valores de K altos producen modelos de menor complejidad, así que se elije un valor de 20 para K, como el mejor modelo en este caso.
+
+## Selección del modelo
+
+Hasta ahora se ha usado cross validation para ayudar con la selección de parámetros, peor también puede hacerlo para elegir entre distintos modelos. Especificamente, se quiere compara el mejor modelo KNN contra un modelo de regresión logística para el conjunto de datos iris. Primero, se ejecuta 10-fold cross validation para el mejor KNN para ver su precisión.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+knn = KNeighborsClassifier(n_neighbors=20)
+print(cross_val_score(knn, X, y, cv=10, scoring='accuracy').mean())
+
+Output:
+0.9800000000000001
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_knn_best]: Mejor KNN con 20 para k]
+
+Este modelo ofrece una precisión del 98%. Se importa e instancia un modelo de regresión logística, y se ejecuta sobre él otro 10-fold cross validation.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.linear_model import LogisticRegression
+logreg = LogisticRegression(solver='liblinear')
+print(cross_val_score(logreg, X, y, cv=10, scoring='accuracy').mean())
+
+Output:
+0.9533333333333334
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_logreg_best]: 10-fold cross validation para regresión logística]
+
+Esto da una precisión del 95%, y por tanto se puede concluir que KNN es una mejor elección que la regresión logística para esta tarea en particular.
+
+## Selección de features
+
+Cross validation también puede ayudar a la hora de seleccionar las features. En el conjunto de datos de publicidad anteriormente expuesto, se usaba una regresión lineal para predecir las ventas. Al final de dicho análisis se concluia que era mejor dejar una feature fuera del entrenamiento para mejorar su precisión.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+data = pd.read_csv('res/advertising.csv', index_col=0)
+feature_cols = ['TV', 'Radio', 'Newspaper']
+X = data[feature_cols]
+y = data.Sales
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_linreg]: Preparar X e y]
+
+Primero se prueba un modelo con las tres features, se usa la función `cross_val_score`, puesto que esta funciona para modelos de clasificación y de regresión. Pero no se puede usar `accuracy` como la métrica de evaluación, puesto que solo es relevante para problemas de clasificación. En su lugar se quiere usar RMSE, root mean squared error, pero está en forma negada en scikitlearn, usando `neg_root_mean_squared_error`. Así que los resultados hay que negarlos una vez obtenidos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+lm = LinearRegression()
+scores = cross_val_score(lm, X, y, cv=10, scoring='neg_root_mean_squared_error')
+
+rmse_scores = -scores
+print(rmse_scores)
+
+Output:
+[1.88689808 1.81595022 1.44548731 1.68069713 1.14139187 1.31971064
+2.85891276 1.45399362 1.7443426  1.56614748]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_linreg_cross]: Cross validation para las 3 features]
+
+El problema aquí es que classification accuracy es una función de recompensa, es decir, algo que se quiere maximizar, mientras que RMSE es una función de perdida, es decir, algo que se quiere minimizar. Pero hay otras funciones en scikitlearn que dependen de los resultados de `cross_val_score` y esas funciones seleccionan el mejor modelo mirando al valor más alto de esta función. Encontrar el valor más alto en una función de recompensa tiene sentido para elegir el mejor modelo, pero encontrar el valor más alto para una función de perdida seleccionaría el peor modelo, así pues, en scikitlearn se tomó una decisión de diseño mediante la cual los valores de `cross_val_score` para todas las funciones con perdida tuvieran un resultado negativo. De esta manera, cuando otras funciones la llamaran, estas siempre podrian asumir que valores altos indican mejores modelos.
+
+Finalmente se calcula la media de todas las RMSE, el resultado es de 1.69.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(rmse_scores.mean())
+
+Output:
+1.6913531708051797
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_linreg_cross_mean]: Media de cross validation para las 3 features]
+
+El objetivo era comparar este modelo con el que no incluia la feature newspaper, para ello se realiza el cross validation quitando esta feature y se obtiene el valor de la media para RMSE.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+feature_cols = ['TV', 'Radio']
+X = data[feature_cols]
+print(-cross_val_score(lm, X, y, cv=10, scoring='neg_root_mean_squared_error').mean())
+
+Output:
+1.6796748419090766
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [cross_linreg_cross_mea2n]: Media de cross validation para las 2 features]
+
+La estimación resultante es de 1.67, y puesto que es un número menor que la del modelo que incluia la feature newspaper, y RMSE es un valor que se quiere minimizar, se puede concluir que el modelo excluyendo esta feature es un modelo mejor.
+
+## Mejoras
+
+Algunas variaciones comunes a cross validation que pueden mejorar el procedimiento son:
+
+- Repetir cross validation, en el cual K-fold cross validation se ejecuta varias veces, con diferentes divisiones de datos en folds, y los resultados se promedian. Esto ofrece una estimación más fiable del rendimiento sobre nuevos datos, reduciendo la varianza asociada con un solo intento de cross validation.
+
+- Crear un conjunto de datos de reserva. En lugar de ejecutar cross validation sobre todos los datos, una parte de los datos se reserva y no se toca durante el proceso de construcción del modelo, se localiza el mejor modelo y se prueba sobre los datos reservados. El rendimiento sobre estos datos reservados se considera una estimación más fiable para el proceso completo.
+
+- La selección de features se suele realizar como un paso previo a cross validation. En su lugar, sería interesante incorporar dicho proceso dentro de cada iteración de cross validation. Realizando estas tareas de selección de features antes de realizar el cross validation no simula plenamente la aplicación del modelo a los datos nuevos, puesto que este proceso tendrá un conocimiento parcial de todo el conjunto de datos, y por tanto la estimación del rendimiento estará sesgado hacia arriba. Se genera una estimación más fiable si todos estos procedimientos tuvieran lugar dentro de las iteraciones de cross validation.
+
+Obviamente, todos estos procedimientos añaden cierta cantidad de complejidad al proceso de modelado y al código, y pueden ser caros computacionalmente. En función del problema en paritcular quizás sea interesante aplicarlos, muchas veces K-fold cross validation suele ser suficiente para los casos normales.
+
+# Búsqueda de parámetros eficiente GridSearchCV
+
+`GridSearchCV` es un método para encontar un conjunto de parámetros que se quieren probar contra un modelo, automaticamente ejecutará cross validation usando cada uno de esos parámetros, y llevará una monitorización de las puntuaciones resultantes. En esencia, reemplaza el bucle mostrado en el ejemplo anterior donde se usaba cross validation para seleccionar el mejor parámetro para K en KNN. Además, ofrece alguna funcionalidad extra interesante.
+
+Para empezar con este método, se importa la clase desde el módulo `model_selection` de scikitlearn. Se crea una lista de Python `k_range` que especifica los valores de K que se quieren buscar. Se crea matriz de parámetros, parameter grid, que es un diccionario de Python, en el cual la clave es el nombre del parámetro y el valor es una lista con todos los valores que se deberían buscar para dicho parámetro. En este caso, el diccionario solo tendrá una pareja clave-valor, en la cual, la clave es la cadena `n_neighbors` y el valor es la lista de valores de 1 a 30. Se instancia el objeto `GridSearchCV`, que recibe los mismos parámetros que 'cross_val_score', pero no incluye X e y, pero incluye `param_grid`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import GridSearchCV
+
+knn = KNeighborsClassifier(n_neighbors=20)
+
+k_range = list(range(1, 31))
+param_grid = dict(n_neighbors=k_range)
+grid = GridSearchCV(knn, param_grid, cv=10, scoring='accuracy')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid]: GridSearchCV para KNN]
+
+Este es un objeto que está listo para realizar 10-fold cross validation, en un modelo `knn` usando classification accuracy como métrica de evaluación. Pero además, ha recibido un parámetro `param_grid`, así que sabe que debe repetir el proceso de cross validation 30 veces, y en cada iteración debe pasar un valor diferente de `n_neighbors` a `knn` desde la lista. Por eso se especifica la matriz de parámetros usando pares de clave-valor. No se le puede pasar a `GridSearchCV` una lista de números de 1 a 30, porque no sabría qué hacer con ellos. En su lugar, hay que especificar el nombre del parámetro en el modelo, en este caso, el parámetro `n_neighbors` recibirá los valores 1 a 30. Si el sistema donde se está ejecutando el código soporta procesamiento paralelo, se puede optar a usar el parámetro `n_jobs`, que si recibe el valor -1, usará todos los procesadores disponibles.
+
+Finalmente se ajusta el `grid` con datos, pasándole los objetos X e y. Este paso puede llevar un tiempo, en función del modelo, los datos y el número de parámetros a buscar. Realmente está ejecutando 10-fold cross validation 30 veces, con lo cual, el modelo `knn` está siendo entrenado y se realizan predicciones 300 veces.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+grid.fit(X, y)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_fit]: Ajustar grid]
+
+Los resultados están almacenados en el atributo `grid_scores`, es una lista de 30 tuplas con nombre. Se puede convertir a un dataframe de pandas para inspeccionarlo comodamente.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+pd.DataFrame(grid.cv_results_)[['mean_test_score', 'std_test_score', 'params']]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_results]: Resultados de GridSearchCV]
+
+El primer resultado indica que cuando al parámetro `n_neighbors` se le pasó el valor 1, la precisión media de cross validation fue de 0.96, y la desviación standard de los resultados fue de 0.05. El valor de la media es al que se suele prestar mayor atención, pero es bueno tener en mente que una desviación standard alta significará que la estimación de la precisión de cross validation puede no ser muy fiable.
+
+Se puede acceder a las tuplas de manera individual, haciendo un slicing sobre la lista, y puesto que es una tupla con nombre, se pueden seleccionar sus elementos usando la notación de puntos. `parameters` es un simple diccionario que contiene los parámetros usados, `cv_validation_scores` es un array de las 10 puntaciones de la precisión que se generaron durante el proceso de 10-fold cross validation usando ese parámetro. Y `mean_validation_score` es la media de esos 10 resultados.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(grid.cv_results_['params'][0])
+print(grid.cv_results_['mean_test_score'][0])
+
+grid_mean_scores = grid.cv_results_['mean_test_score']
+print(grid_mean_scores)
+
+Output:
+{'n_neighbors': 1}
+0.96
+
+[0.96       0.95333333 0.96666667 0.96666667 0.96666667 0.96666667
+ 0.96666667 0.96666667 0.97333333 0.96666667 0.96666667 0.97333333
+ 0.98       0.97333333 0.97333333 0.97333333 0.97333333 0.98
+ 0.97333333 0.98       0.96666667 0.96666667 0.97333333 0.96
+ 0.96666667 0.96       0.96666667 0.95333333 0.95333333 0.95333333]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_results_first]: Primer resultado de GridSearchCV]
+
+Es sencillo recoger las medias y generar un gráfico con ellas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+fig, ax = plt.subplots()
+ax.plot(k_range, grid_mean_scores)
+ax.set_xlabel('Value of K for KNN')
+ax.set_ylabel('Cross-Validated Accuracy')
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_results_plot]: Generar gráfico con resultados de GridSearchCV]
+
+Se puede verificar que el resultado es identico al obtenido anteriormente.
+
+![Figure [res/009_005]: Gráfico con resultados de GridSearchCV](res/009_005.png)
+
+Una vez una `grid` se ha ajustado con datos, expone tres atributos útiles. `best_score_` es la mejor puntuación conseguida entre todos los parámetros, `best_params_` es un diccionario que contiene los parámetros usados para generar dicha puntuación, y `best_estimator_` es el objeto del modelo ajustado con esos parámetros.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(grid.best_score_)
+print(grid.best_params_)
+print(grid.best_estimator_)
+
+Output:
+0.9800000000000001
+{'n_neighbors': 13}
+KNeighborsClassifier(n_neighbors=13)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_results_sum]: Resumen de resultados de GridSearchCV]
+
+Viendo el gráfico se puede observar que hay otros dos valores que también han producido un valor de puntuación de 0.98, scikitlearn simplemente elige el primero que ha obtenido dicha puntuación.
+
+## Buscar varios parámetros simultaneamente
+
+A veces se quieren buscar varios parámetros distintos de manera simultanea para el mismo modelo. Por ejemplo, si se usa un clasificador para un árbol de decisión, dos parámetros importantes son `max_depth` y `min_samples_leaf`. Se pueden ajustar dichos parámetros de manera independiente, se pueden probar valores diferentes para el primer parámetro, mientras que se deja el segundo parámetro con sus valores por defecto. Y luego, probar distintos valores para el segundo parámetro fijando el primero a su valor por defecto. El problema con esta aproximación, es que el mejor modelo puede obtenerse cuando ninguno de esos parámetros esté a su valor por defecto, así que hay que buscar esos dos parámetros de manera simultanea.
+
+En el caso de KNN, otro parámetro que puede ser útil ajustar aparte de K, es `weights`. Este parámetro contola como se pesan los vecinos cuando se realiza una predicción. La opción por defecto es `uniform`, con la cual, todos los puntos en el vecindario se pesan igual, pero otra opción es `distance`, que pesa más los vecinos cercanos que los vecinos lejanos. Así pues, se crea una lista con estas opciones llamada `weight_options`, además de los 30 valores en `k_range` para el parámetro `n_neighbors`. Otra vez, se crea una matriz de parámetros, pero en este caso el diccionario tiene dos pares clave-valor, una pareja para cada parámetro.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+k_range = list(range(1, 31))
+weight_options = ['uniform', 'distance']
+
+param_grid = dict(n_neighbors=k_range, weights=weight_options)
+print(param_grid)
+
+Output:
+{'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], 'weights': ['uniform', 'distance']}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_sim]: Busqueda de dos parámetros simultaneos]
+
+Se instancia la `grid` y se ajusta a los datos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+grid = GridSearchCV(knn, param_grid, cv=10, scoring='accuracy')
+grid.fit(X, y)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_sim_fit]: Ajuste de la grid con dos parámetros simultaneos]
+
+Esto se conoce como gridsearch exhaustivo, puesto que este proceso está buscando cada combinación posible de los parámetros `n_neighbors` y `weights`. Puesto que son 30 opciones para el primero, y 2 para el segundo, se realizan 10-fold cross validation 60 veces.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+pd.DataFrame(grid.cv_results_)[['mean_test_score', 'std_test_score', 'params']]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_sim_results]: Resultados con dos parámetros simultaneos]
+
+Se puede observar que hay una tupla para cada combinación posible de los dos parámetros, y observando `best_score_` y `best_parameters_` resulta que la mejor puntuación no mejora, y usar el valor 13 para `n_neighbors` con el valor por defecto para `weights` sigue siendo la mejor opción para este modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(grid.best_score_)
+print(grid.best_params_)
+
+Output:
+0.9800000000000001
+{'n_neighbors': 13, 'weights': 'uniform'}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_sim_results_sum]: Mejor resultado]
+
+Una vez se obtienen estos parámetros optimos, es crítico entrenar el modelo con estos parámetros usando todos los datos. `GridSearchCV` automaticamente vuelve a entrenar el modelo usando todo el conjunto de datos con los mejores parámetros que encuentra, y dicho modelo entrenado se almacena junto al objeto `grid` y expone un método `predict` que permite realizar predicciones usando dicho modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+grid.predict([[3, 5, 4, 2]])
+
+Output:
+array([1])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_sim_predict]: Predicción del mejor modelo]
+
+## RandomizedSearchCV
+
+Existe un método similar a `GridSearchCV`, llamado `RandomizedSearchCV`. El problema que trata de resolver este nuevo método es el posible coste computacional que puede acarrear una búsqueda exhaustiva de multiples parámetros de manera simultanea. Por ejemplo, buscar 10 valores distintos para cuatro parámetros a la vez, necesitará 10000 ejecuciones de cross validation, es decir, 10000 entrenamientos, predicciones,... `RandomizedSearchCV` soluciona esto buscando solo un subconjunto aleatorio de los parámetros y permitiendo controlar de manera explícita el número de combinaciones distintas de parámetros se pueden intentar. Con lo cual, se puede controlar cuanto tiempo se quiere ejecutar en función del tiempo disponible. Se importa la clase `RandomizedSearchCV` del módulo `model_selection`. En este caso se especifican las distribuciones de los parámetros más que una matriz de parámetros. Para parámetros discretos, donde se puede generar una lista de valores discretos, como enteros o strings, está especificación funciona exactamente como antes. En este caso, ambos parámetros son discretos, y por tanto, tiene la misma forma que `param_grid`. Sin embargo, si uno de los parámetros fuera continuo, como un parámetros de regularización para una regresión, es importante especificar una distribución continua más que una lista de posibles valores, para que `RandomizedSearchCV` pueda realizar una busqueda más fina.
+
+Se instancia `RandomizedSearchCV`, se entrena con los datos, y se mira la puntuación del resultado.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import RandomizedSearchCV
+
+param_dist = dict(n_neighbors=k_range, weights=weight_options)
+rand = RandomizedSearchCV(knn, param_dist, cv=10, scoring='accuracy', n_iter=10, random_state=5)
+rand.fit(X, y)
+pd.DataFrame(rand.cv_results_)[['mean_test_score', 'std_test_score', 'params']]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_random]: RandomizedSearchCV sobre dos parámetros]
+
+Esta clase recibe dos parámetros nuevos, `n_iter` que controla el número de combinaciones aleatorias que probará, y `random_state`, que se fija a un valor para ganar reproducibilidad. Con los resultados, se pueden ver las 10 combinaciones que de parámetros que ha probado, y una vez más, se puede mirar a la mejor puntuación y mejores parámetros.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(rand.best_score_)
+print(rand.best_params_)
+
+Output:
+0.9800000000000001
+{'weights': 'uniform', 'n_neighbors': 18}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_random_results]: Resultado de RandomizedSearchCV sobre dos parámetros]
+
+E incluso aunque lo haya intentado solo con 10 combinaciones de `n_neighbors` y `weights`, se las ha apañado para encontrar una combinación de ambos con la misma máxima puntuación que `GridSearchCV`. Es posible que este método no obtenga tan buen resultado como `GridSearchCV`, pero a menudo lo hace, o al menos uno muy cercano en una fracción del tiempo.
+
+Se puede incluso ejecutar `RandomizedSearchCV` con `n_iter` a 10, y repetir el proceso 20 veces, almacenando el mejor resultado cada vez.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+best_scores = []
+for _ in range(20):
+    rand = RandomizedSearchCV(knn, param_dist, cv=10, scoring='accuracy', n_iter=10)
+    rand.fit(X, y)
+    best_scores.append(round(rand.best_score_, 3))
+print(best_scores)
+
+Output:
+[0.98, 0.98, 0.98, 0.98, 0.973, 0.98, 0.973, 0.98, 0.98, 0.98, 0.973, 0.98, 0.98, 0.973, 0.973, 0.98, 0.98, 0.973, 0.973, 0.98]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [grid_random_loop]: Bucle de RandomizedSearchCV sobre dos parámetros]
+
+Como se puede observar, la mayoría de las veces el resultado es 0.98, y cuando no lo es, es muy cercano. Como recomendación práctica, se suele empezar usando `GridSearchCV`, pero se cambia a `RandomizedSearchCV` si el primero tarda más que el tiempo disponible. Y cuando se empieza con `RandomizedSearchCV` se hace con un valor pequeño de `n_iter`, se mide cuanto tiempo tarda, y se ajusta a un valor mayor al tiempo disponible.
+
+# Evaluar un modelo de clasificación
+
+## Classification Accuracy
+
+Siempre se necesita una métrica de evaluación que acompañe al procedimiento elegido para evaluar un modelo. La elección de dicha métrica dependerá del tipo de problema que se está intentando solucionar. Con problemas de regresión se suele usar MAE, MSE o RMSE, para problemas de clasificación se ha usado classification accuracy hasta ahora, pero hay otras métricas importantes para los problemas de clasificación.
+
+Classification accuracy es la métrica más sencilla. Para trabajar sobre ella se va a usar un conjunto de datos de diabetes de los indios Pima, que incluye datos de salud y el estado de la diabetes para 768 pacientes. Se carga dicho conjunto de datos en un dataframe de pandas usando la función `read_csv`, especificando explícitamente los nombres de las columnas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+path = 'res/pima-indians-diabetes.data'
+col_names = ['pregnant', 'glucose', 'bp', 'skin', 'insulin', 'bmi', 'pedigree', 'age', 'label']
+pima = pd.read_csv(path, header=None, names=col_names)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_load]: Carga de conjunto de datos]
+
+Cada fila representa a un paciente, y la columna `label` contiene 1 si el paciente tiene diabetes, y 0 si no la padece. Se define el problema de clasificación de la siguiente manera, se puede predecir el estado de la diabetes para un paciente dadas sus medidas de salud? Se define la matriz de features X y el vector target y. Se eligen las features `pregnant`, `insulin`, `bmi` y `age`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+feature_cols = ['pregnant', 'insulin', 'bmi', 'age']
+X = pima[feature_cols]
+y = pima.label
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_x_y]: Matriz X de features y vector y de targets]
+
+Se usa `train_test_split` para dividir los datos en conjuntos de entrenamiento y pruebas, se entrena un modelo de regresión logística. En este paso el modelo aprende la relación entre `x_train` e `y_train`, y por último se realizan predicciones para el test de pruebas. Con esto se obtiene la predicción de una clase, 0 o 1, para cada observación en el conjunto de pruebas, que se guarda en un objeto `y_pred_class`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+logreg = LogisticRegression(solver='liblinear')
+logreg.fit(X_train, y_train)
+
+y_pred_class = logreg.predict(X_test)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_fit]: Entrenamiento de regresión logística]
+
+Ahora se puede calcular classification accuracy, que es simplemente el porcentaje de predicciones correctas, se le pasa al método `accuracy_score` del módulo `metrics` de scikitlearn `y_test` y los valores predichos en `y_pred_class`, y puesto que el primero contiene los datos de respuesta correctos, se puede calcular que porcentaje de las predicciones han sido correctas. En este caso la precisión es del 69%, que puede parecer bastante buena.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn import metrics
+
+print(metrics.accuracy_score(y_test, y_pred_class))
+
+Ouput:
+0.6927083333333334
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_accuracy]: Classification accuracy para la regresión logística]
+
+## Null Accuracy
+
+Sin embargo, cada vez que se usa classification accuracy como métrica de evaluación, es importante compararla con null accuracy, que es la precisión que se hubiera obtenido si siempre se predijera la clase más frecuente en el conjunto de pruebas.
+
+Se puede calcular la precisión nula para este problema, el objeto `y_test` es una serie de pandas y por tanto, tiene un método `value_counts`, que cuenta el número de instancias que existen de cada valor en una serie.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_test.value_counts()
+
+Ouput:
+0    130
+1     62
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_null_accuracy]: Instancias de cada valor de clase]
+
+En este caso, el valor 0 está presente en 130 observaciones, y el valor 1 en 62. Esto se conoce como la distribución de la clase. Null accuracy responde a la pregunta, si el modelo tuviera que predecir la clase predominante, cuantas veces acertaría? Puesto que `y_test` solo contiene 1 y 0, se puede calcular el porcentaje de 1 simplemente cogiendo la media.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_test.mean()
+
+Ouput:
+0.3229166666666667
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_null_accuracy1]: Porcentaje de distribución de la clase 1]
+
+En este caso, el 32% de los valores en `y_test` son 1. Y puesto que solo hay dos clases, la distribución de 0 es del 68%. Y ya que 68% es mayor que 32% se podría decir que null accuracy para este problema es del 68%. En otras palabras, un modelo dummy que siempre prediga que un paciente no tiene daibetes, acertaría en el 68% de las veces. Pero este, obviamente, no es un modelo útil, pero ofrece una línea base de trabajo contra la cual se puede medir el modelo de regresión logística. Cuando se compara null accuracy de 68%, contra el 69% de la precisión del modelo obtenida anteriormente, de repente, el modelo ya no parece tan bueno. Esto demuestra la debilidad de classification accuracy como métrica de evaluación, ya que no informa de nada acerca de la distribución subyacente del conjunto de pruebas.
+
+Para calcular null accuracy se puede coger el máximo entre la media de `y_test` y uno menos la media de `y_test`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+max(y_test.mean(), 1 - y_test.mean())
+
+Ouput:
+0.6770833333333333
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_null_accuracy2]: Calcular null accuracy]
+
+Esto solo funcionará para problemas de clasificación binarios, en los cuales el target esté codificado como 1 o 0. Para un problema para 3 o más clases se puede usar este método, que solo funcionará para una serie de pandas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_test.value_counts().head(1) / len(y_test)
+
+Ouput:
+0.6770833333333333
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_null_accuracy3]: Calcular null accuracy para tres o más clases]
+
+Aún hay otra debilidad de classification accuracy, sie se toman las primeras 25 respuestas de `y_test`, y las primeras 25 predicciones de `y_pred_class`, se pueden observar ciertos patrones.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print('True:', y_test.values[0:25])
+print('Pred:', y_pred_class[0:25])
+
+Ouput:
+True: [1 0 0 1 0 0 1 1 0 0 1 1 0 0 0 0 1 0 0 0 1 1 0 0 0]
+Pred: [0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_patterns]: 25 primeras predicciones y valores ciertos]
+
+Cuando el valor real del target es 0, el modelo casi siempre predice bien un 0, pero cuando el valor real del target es 1, el modelo raramente predice un 1. Es decir, el modelo normalmente suele realizar sistematicamente cierto tipo de errores, pero no otros, pero nunca se sabrían examinando la precisión.
+
+Classification accuracy es una métrica útil, es la más sencilla, pero no informa acerca de la distribución subyacente, ni dice nada acerca del tipo de errores que el modelo está cometiendo, que suele ser útil en situaciones reales.
+
+## Matriz de confusión
+
+Para solucionar estos problemas existe la matriz de confusión, que basicamente es una tabla que describe el rendimiento de un modelo de clasificación. Esta función se encuentra en el módulo `metrics`, y devuelve un array de NumPy, en este caso de dimensión 2x2, el ndarray no está etiquetado de ninguna manera y es un poco confuso al principio.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(metrics.confusion_matrix(y_test, y_pred_class))
+
+Ouput:
+[[118  12]
+ [ 47  15]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_confusion]: Matriz de confusión]
+
+Es importante al usar la matriz de confusión que reciba como primer parámetro los valores reales y los predichos como segundo parámetro. Hacerlo al revés, supondrá que la matriz de confusión esté invertida, pero sin mostrar ningún error, y provocando que toda la información se malinterprete. En general, todas las funciones de métricas de scikitlearn suelen esperar los valores reales como primer parámetro y los predichos como segundo.
+
+Se puede interpretar la matriz de confusión como un cálculo de los dos tipos de predicciones correctas que un clasificador puede hacer, además de un cálculo de los dos tipos de predicciones incorrectas que puede hacer. Así pues, cada observación en el conjunto de pruebas está representada en exactamente una celda de la matriz de confusión. Algunas veces, esta matriz peude estar etiquetada explicitamente con el número total de observaciones representadas, en este caso 192. El tamaño de dicha matriz es 2x2 porque este es un problema de clasificación binario, si hubieran 5 posibles clases en el target, la matriz sería de tamaño 5x5. El formato mostrado no es universal, a veces las posiciones de los valores reales y los predichos están invertidos, es crítico en este punto prestar atención al formato particular cuando se interpreta una matriz de confusión.
+
+![Figure [res/009_006]: Matriz de confusión](res/009_006.png)
+
+Cuando se usa una matriz de confusión para un problema binario cada una de esas cuatro celdas tiene un nombre específico.
+
+- Abajo-derecha, se llama verdaderos positivos, true positives, indica que en 15 casos el clasificador ha predicho correctamente que un paciente tiene diabetes
+- Arriba-izquierda, verdaderos negativos, true negatives, indica que en 118 casos el clasificador ha predicho correctamente que un paciente no tiene diabetes
+- Arriba-derecha, falsos positivos, false positives, indica que en 12 casos el clasificador ha predicho incorrectamente que un paciente tiene diabetes
+- Abajo-izquierda, falsos negativos, false negatives, indica que en 47 casos el clasificador ha predicho incorrectamente que un paciente no tiene diabetes
+
+Se usa por convención que la clase codificada como 1, sea la clase positiva, y la que sea 0, como negativa. Por eso, predecir correctamente un valor 1, se conoce como verdadero positivo, y predecir un valor 0, sea un verdadero negativo. Si se tiene algún problema recordando la diferencia entre un falso positivo y un falso negativo, se puede pensar en los falsos positivos como casos en los cuales el clasificador a predicho un positivo falsamente, y falsos negativos como predichos negativos falsamente. A los falsos positivos se les conoce en otros campos como errores de tipo 1, y a los falsos negativos, como errores de tipo 2. Por último, hay que tener en cuenta que estos cuatro números son contadores enteros, no son tasas ni índices.
+
+Se puede guardar la matriz de confusión en un objeto llamado `confusion` y usar la notación de NumPy de corchetes para dividirla en cuatro trozos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+confusion = metrics.confusion_matrix(y_test, y_pred_class)
+TP = confusion[1, 1]
+TN = confusion[0, 0]
+FP = confusion[0, 1]
+FN = confusion[1, 0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_confusion_slice]: Matriz de confusión separada en sus cuatro trozos]
+
+![Figure [res/009_007]: Matriz de confusión](res/009_007.png)
+
+## Métricas a partir de la matriz de confusión
+
+La matriz de confusión es útil puesto que ayuda a entender al rendimiento del clasificador, pero también puede ayudar a elegir entre modelos. No es una métrica de evaluación de modelos, y no se le puede decir directamente a scikitlearn que elija un modelo con la mejor matriz de confusión. Sin embargo, hay varias métricas que se pueden derivar de una matriz de confusión, y estas pueden ser directamente usadas para elegir entre modelos.
+
+### Classification accuracy
+
+La propia classification accuracy se puede obtener a partir de la matriz de confusión, se suman los verdaderos positivos y negativos, y se divide por el número total de observaciones. Se obtiene el mismo resultado que usando `accuracy_score` de scikitlearn.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print((TP + TN) / (TP + TN + FP + FN))
+print(metrics.accuracy_score(y_test, y_pred_class))
+
+Output:
+0.6927083333333334
+0.6927083333333334
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_accuracy_score]: Classification accuracy a partir de matriz de confusión]
+
+### Classification error
+
+La siguiente métrica es classification error, también conocida como missclassification rate. Es igual a la suma de falsos positivos y negativos, dividido por el total. O también se puede calcular como 1 menos `accuracy_score`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print((FP + FN) / (TP + TN + FP + FN))
+print(1 - metrics.accuracy_score(y_test, y_pred_class))
+
+Output:
+0.3072916666666667
+0.30729166666666663
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_class_err]: Classification error a partir de matriz de confusión]
+
+### Sensitivity
+
+La siguiente métrica es sensitivity, que contesta a, cuando el valor real es positivo, con qué frecuencia es correcta la predicción? Mirando al ejemplo de valores reales para positivos y las respuestas predichas, se sabe que la sensitivity va a ser baja, puesto que en la mayoría de los casos cuando el valor real es 1, el modelo predice incorrectamente un 0. Mirando a la matriz de confusión, sensitivity se puede calcular dividiendo los verdaderos positivos, por el total de la fila de abajo, 15/62. La fila de abajo es relevante para este cálculo, puesto que solo se consideran los casos en los que la respuesta real sea 1. El termino sensitivity tiene sentido de manera intuitiva, puesto que es un cálculo de como de sensible es el clasificador al detectar instancias positivas. Sin embargo, también se le conoce como la tasa de verdaderos positivos, o recall. En cada campo de estudio se usa un termino distinto. Scikitlearn tiene una métrica llamada `recall_score` que puede realizar el cálculo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(TP / (TP + FN))
+print(metrics.recall_score(y_test, y_pred_class))
+
+Output:
+0.24193548387096775
+0.24193548387096775
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_sensitivity]: Sensitivity a partir de matriz de confusión]
+
+### Specifity
+
+La siguiente métrica es specifity, que contesta a, cuando el valor real es negativo, con qué frecuencia es correcta la predicción? Como sensitivity, specifity es algo que se quiere maximizar. En el ejemplo anterior, se sabe que specifity será alta, puesto que en la mayoría de los casos cuando el valor real es 0, el modelo predice correctamente ese 0. Se calcula dividiendo los verdaderos negativos por el total de la fila de arriba, 118/130. Esta vez, lo relevante es la fila de arriba. Se puede interpretar como la descripción de como de específico o selectivo es un clasificador prediciendo instancias positivas. No hay una función para esto en scikitlearn, hay que calcularla a mano. Tanto para sensitivity, como para specifity, el mejor valor posible es 1, describiendo al clasificador como muy específico pero no altamente sensible.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(TN / (TN + FP))
+
+Output:
+0.9076923076923077
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_specifity]: Specifity a partir de matriz de confusión]
+
+### False positive rate
+
+Otra métrica útil es la tasa de falsos positivos, que contesta a, cuando el valor real es negativo, con qué frecuencia es incorrecta la predicción? Como specifity, solo la fila de arriba de la matriz de confusión es relevante para este cálculo, excepto que ahora, son los falsos positivos dividido por el total de la fila superior. En realidad, esta tasa es realmente 1 menos specifity.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(FP / (TN + FP))
+
+Output:
+0.09230769230769231
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_flase_positive]: False positive rate a partir de matriz de confusión]
+
+### Precision
+
+Por último, se tiene la precisión, que contesta a, cuando se predice un valor positivo, con qué frecuencia es correcta la predicción? Es la primera métrica en la que el denominador es una columna en lugar de una fila, y se calcula dividiendo los verdaderos positivos por el total de la columna de la derecha, 15/27. Esta métrica describe como de preciso es el clasificador a la hora de predecir una instancia positiva. Se puede calcular usando la función `precision_score` en el módulo `metrics`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(TP / (TP + FP))
+print(metrics.precision_score(y_test, y_pred_class))
+
+Output:
+0.5555555555555556
+0.5555555555555556
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_precision]: Precisión a partir de matriz de confusión]
+
+Se pueden calcular muchas otras métricas a partir de la matriz de confusión, como f1_score o el coeficiente de correlación de Matthews. Siempre es interesante examinar la matriz de confusión del clasificador, puesto que muestra una imagen más completa de como funciona dicho clasificador. Y también permite calcular varias métricas, que pueden guiar en el proceso de selección del modelo. Sin embargo, no se puede optimizar el modelo para cada una de esas métricas, se suele elegir entre ellas.
+
+La elección de una métrica por último depende del obetivo. Si se construye un filtro anti spam, en el cual, una observación representa a un correo electrónico, y una clase positiva es spam. En este caso, la mayoría de la gente diría que los falsos negativos, en los cuales un correo spam acaba en la bandeja de entrada son más aceptables que los falsos positivos, en los cuales correos validos son capturados por el filtro antispam. Así pues, la prioridad sería minimizar los falsos positivos y para ello, quizás optimizar el modelo para precisión o specifity. Otro ejemplo, detector de transacciones fraudulentas para una web, cada transacción representa una observación, y la clase positiva que sea fraudulenta. En este caso, el propietario de la web puede juzgar que los falsos positivos, en los cuales transacciones normales se cataloguen como fraudulentas, son más aceptables que los falsos negativos, en los cuales se cuelan transacciones fraudulentas, puesto que lo primero se puede resolver sin perder la venta, mientras que lo último supone en una perdida directa de dinero. Así, la priorida será minimizar los falsos negativos, se podrá optar por optimizar el modelo para sensitivity.
+
+## Ajustar el umbral de clasificación
+
+Ahora se va a discutir como modificar el rendimiento de un clasificador ajustando su umbral de clasificación, o classification threshold. Se se miran a las 10 primeras predicciones, pasando 'X_test' al método `predict` para el modelo de regresión logística, es un array 1D de 0 y 1, como se esperaba.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+logreg.predict(X_test)[0:10]
+
+Output:
+[0, 0, 0, 0, 0, 0, 0, 1, 0, 1]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict10]: 10 primeras predicciones]
+
+Hay un método similar para los modelos de clasificación llamado `predict_proba` que devuelve las probabilidades de las predicciones de la pertenencia a las clases.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+logreg.predict_proba(X_test)[0:10, :]
+
+Output:
+array([[0.63247571, 0.36752429],
+       [0.71643656, 0.28356344],
+       [0.71104114, 0.28895886],
+       [0.5858938 , 0.4141062 ],
+       [0.84103973, 0.15896027],
+       [0.82934844, 0.17065156],
+       [0.50110974, 0.49889026],
+       [0.48658459, 0.51341541],
+       [0.72321388, 0.27678612],
+       [0.32810562, 0.67189438]])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_proba]: Probabilidades de las predicciones]
+
+Si se mira a las 10 primeras probabilidades de las predicciones, se puede averiguar que cada fila representa una observación, y cada columnna una clase en particular. Hay dos columnas puesto que hay dos posibles clases de respuesta, 0 y 1. La columna de la izquierda, 0, muestra la probabildad de que la predicción de cada observación sea un miembro de la clase 0. En la derecha, la columna 1, muestra la probabilidad de que la predicción de cada observación pertenezca a la clase 1. Para cada fila, esos números deberían sumar 1. De donde vienen? El modelo aprende un coeficiente para cada feature de entrada, durante el entrenamiento, y estos coeficientes se usan para calcular la probabilidad de cada clase para cada observación en el conjunto de pruebas.
+
+Puesto que el modelo predice la probabilidad de padecer diabetes, se puede hacer un rank de las observaciones por la probabilidad de la predicción de dicha diabetes, y priorizar el alcance preventivo para los pacientes en consecuencia, puesto que tiene más sentido contactar con un paciente con un 95% de probabilidades de tneer diabetes que con otro que solo tenga un 50%.
+
+De todas formas, cuando se ejecuta el método `predict` para un modelo de clasificación, primero predice las probabilidades de cada clase, y entonces elige la clase con la probabilidad más alta como la respuesta. Para un problema binario como este, otra forma de verlo, es que hay un umbral de clasificación de 0.5, y la clase 1 se predice solo si ese umbral se supera, de otra manera se predice la clase 0. Solo se muestran dos instancias en las cuales la probabilidad de la clase 1 se predice.
+
+Se aislan las probabilidades de predicción para la clase 1, puesto que con saber eso ya se puede calcular la probabilidad predictiva para ambas clases. Se piden todas las filas, observaciones, pero solo la columna 1, las positivas, y se guarda el resultado en un objeto `y_pred_prob`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+y_pred_prob = logreg.predict_proba(X_test)[:, 1]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_prob]: Probabilidades de las predicciones positivas]
+
+Se genera un gráfico de un histograma de estas probabilidades para ayudar a demostrar como ajustar el umbral de clasificación puede impactar al rendimiento del modelo.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+fig, ax = plt.subplots()
+ax.hist(y_pred_prob, bins=8)
+ax.set_xlim(0, 1)
+ax.set_title('Histogram of predicted probabilities')
+ax.set_xlabel('Predicted probability of diabetes')
+ax.set_ylabel('Frequency')
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_prob_plot]: Generar histograma de probabilidades de las predicciones positivas]
+
+![Figure [res/009_008]: Histograma de probabilidades de predicciones positivas](res/009_008.png)
+
+El histograma muestra la distribución de variable numérica, se puede observar como la altura de la tercera columna, que cerca de 45 obsevaciones tienen valores entre 0.2 y 0.3. Dado que el umbral de clasificación es 0.5, se puede ver con este histograma que la clase 1 se predice muy raramente, puesto que solo una pequeña minoria de las observaciones en el conjunto de pruebas tienen una probabilidad de predicción por encima del umbral. Que pasaría si se cambiara el umbral a un valor distinto a 0.5? Resulta que se pueden ajustar sensitivity y specifity de un clasificador, simplemente ajustando dicho umbral. Por ejemplo, si se baja el umbral para predecir la diabetes, por ejemplo a 0.3, se inrementa la sensitivity del clasificador. De esta manera todas las probabilidades de predicción por encima de 0.3 serían predichas como clase 1. Esto incrementa la sensitivity, puesto que ahora el clasificador es más sensible a instancias positivas.
+
+Se baja el umbral para predecir la diabetes, se puede usar la función `binarize` de scikitlearn, que recibe `y_pred_prob` y un valor de umbral de 0.3.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.preprocessing import binarize
+y_pred_class = binarize([y_pred_prob], threshold=0.3)[0]
+
+print(y_pred_class[0:10])
+
+Output:
+[1. 0. 0. 1. 0. 0. 1. 1. 0. 1.]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_binarize]: Cambiar el umbral de clasificación]
+
+Devolverá un 1 para todos los valores por encima de 0.3, y un 0 para el resto. Los resultados estñan un ndarray bidimensional de NumPy, así que se hace slicing sobre la primera dimensión y se guardan los resultados en el objeto `y_pred_class`.
+
+Si se comprueban las 10 primeras probabilidades y las nuevas prediccines con el nuevo umbral, se puede verificar que el cambio ha funcionado. Ahora hay cinco instancias en las cuales se ha predicho un valor de 1. Para ver el impacto de este cambio en el conjunto de pruebas completo, se puede imprimir la matriz de confusión anterior, almacenada el objeto `confusion`, y compararla con la matriz de confusión actual.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(confusion)
+
+print(metrics.confusion_matrix(y_test, y_pred_class))
+
+Output:
+[[118  12]
+ [ 47  15]]
+
+[[80 50]
+ [16 46]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_confusion]: Matrices de confusion para los dos umbrales]
+
+Los totales de las filas no han cambiado puesto que las filas representan las valores de respuesta reales, y aún siguen haviendo 130 observaciones en la fila superior, y 62 en la inferior. Pero los totales de las columnas han cambiado, puesto que muchas de las predicciones de la clase 0, se han movido a la clase 1. Se puede ver como observaciones de la columna 0 moviendose a la columna 1. Se puede recalcular la sensitivity, que ha aumentado de 0.4 a 0.74.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(46 / (46 + 16))
+
+Output:
+0.7419354838709677
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_sensitivity]: Sensitivity para el nuevo umbral]
+
+También se puede recalcular specifity, que ha bajado de 0.91 a 0.62.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(80 / (80 + 50))
+
+Output:
+0.6153846153846154
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_predict_specifity]: Specifity para el nuevo umbral]
+
+Specifity ha bajado, puesto que las observaciones se han movido de la columna 0 a la 1, eso garantiza que el número de falsos positivos se incrementarán, y por tanto los verdaderos negativos se decrementarán, lo cual hace bajar la specifity.
+
+Se usa un umbral de 0.5 por defecto al convertir probabilidades de predicción a predicciones de clase. Sin embargo, no hay porque aceptar el umbral por defecto, y se puede bajar para incrementar sensitivity, o elevarlo para incrementar specifity, dependiendo del objetivo final. Pero, estas dos variables tienen una relación inversa, así que, incrementar una hará que la otra se decremente. Ajustar el umbral es uno de los últimos pasos que se deberían tomar en el proceso de construcción de un modelo. La mayoría del tiempo debería invertirse en construir mejores modelos, y luego seleccionar el mejor posible.
+
+## Curva ROC y AUC
+
+Puede parecer muy ineficiente andar buscando a mano un umbral optimo, probando valres distintos, uno cada vez. Hay un mecanismo muy simple para obtener una visualización de esto, dibujar la curva ROC (Receiver Operative Characteristic). Se ejecuta la función `roc_curve` del módulo `metrics` de scikitlearn, se le pasan los valores reales target del conjunto de pruebas, almacenados en `y_test` y la probabilidad de la predicción de la clase 1 para cada observación, en `y_pred_prob`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+fpr, tpr, thresholds = metrics.roc_curve(y_test, y_pred_prob)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_roc_curve]: ROC curve]
+
+Es importante que se use `y_pred_prob`, y no `y_pred_class` al crear la curva ROC, puesto que usar `y_pred_class`, puesto que los datos serían incorrectos, pero no mostraría ningún error. La función `roc_curve` devuelve 3 objetos, la tasa de predicciones de falsos positivos, la tasa de predicciones de verdaderos positivos y los umbrales.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+fig, ax = plt.subplots()
+ax.plot(fpr, tpr)
+ax.set_xlim([0.0, 1.0])
+ax.set_ylim([0.0, 1.0])
+ax.set_title('ROC curve for diabetes classifier')
+ax.set_xlabel('False Positive Rate (1 - Specificity)')
+ax.set_ylabel('True Positive Rate (Sensitivity)')
+plt.grid(True)
+plt.show()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_roc_curve_plot]: Generar gráfico de ROC curve]
+
+La curva ROC es una línea de la tasa de verdaderos positivos en el eje y, contra los falsos positivos en el eje x, para todos los posibles umbrales de clasificación.
+
+![Figure [res/009_009]: ROC curve](res/009_009.png)
+
+El eje y es sensitivity, y el eje x es 1 menos specifity. Este gráfico informa que, por ejemplo, si se quiere obtener una sensitivity de 0.9, se tiene que aceptar specifity de 0.4. La curva ROC óptima, es aquella cuya esquina está muy cerca de la esquina superior izquierda del gráfico, que representaría un clasificador con alta sensitivity y alta specifity. La curva ROC, puede ayudar a elegir un umbral de manera visual que pueda balancear sensitivity y specifity, de manera que tenga sentido para el problema en cuestión. Por desgracia, no se pueden ver los umbrales exactos usados para generar la curva en la propia curva. Pero una simple función, llamada `evaluate_threshold`, puede recibir un valor de umbral, y devuelve sensitivity y specifity para ese umbral.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+def evaluate_threshold(threshold):
+    print('Sensitivity:', tpr[thresholds > threshold][-1])
+    print('Specificity:', 1 - fpr[thresholds > threshold][-1])
+
+print(evaluate_threshold(0.5))
+print(evaluate_threshold(0.3))
+
+Output:
+Sensitivity: 0.24193548387096775
+Specificity: 0.9076923076923077
+
+Sensitivity: 0.7258064516129032
+Specificity: 0.6153846153846154
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_eval_threshold]: Función `evaluate_threshold`]
+
+La curva ROC es un gráfico de sensitivity contra 1 menos specifity, para todos los umbrales de clasificación, de 0 a 1. De cualquier manera, dado un punto particular en la curva ROC, es un simple proceso de prueba y error hasta encontrar el umbral que produce dicho punto.
+
+Existe otro termino interesante, el área bajo la curva, conocido como AUC, Area Under the Curve. Que es literalmente el area que se encuentra bajo la curva ROC, es decir, el porcentaje de todo el gráfico cuadrado que está bajo la curva. Un clasificador ideal, llegaría hasta la esquina superior izquierda, por lo tanto, un valor alto de AUC es indicativo de un clasificador mejor. Así que, AUC se suele usar como un valor que resume el rendimiento de un clasificador, como alternativa a classification accuracy. Se puede calcular el AUC de un modelo usando la función `roc_auc_score` del módulo `metrics`. Es importante pasar primero los valores reales de los targets, y luego las probabilidades de las predicciones, no las clases predichas.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+print(metrics.roc_auc_score(y_test, y_pred_prob))
+
+Output:
+0.7245657568238213
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_auc]: Area Under the Curve]
+
+El AUC para este ejemplo es de 0.72, mientras que el mejor posible AUC para cualquier clasificador es 1. El AUC también se puede interpretar de otra forma, si se eligen de manera aleatoria una observación positiva, y una observación negativa del conjunto de pruebas, AUC representa la probabilidad que el clasificador asigne un probabilidad de predicción más alta a la observación positiva. Tiene sentido que sea un objetivo útil, puesto que se quiere que el clasificador ordene a las observaciones positivas más altas que a las negativas, en terminos de probabilidad de las prediccines. AUC es una métrica de evaluación útil, incluso cuando hay un alto desbalance en las clases, cuando una de las clases domina. Si se estuvieran detectando transacciones fraudulentas, por ejemplo, se esperaría que la mayoría de las transacciones no fueran fraudulentas, y por tanto, null accuracy estaría por encima del 90%. En este escenario, AUC sería una métrica útil, mientras que classification accuracy no lo sería. De todas formas, puesto que AUC se suele usar como métrica para elegir entre modelos, está disponible como función de `scoring` en el método `cross_val_score`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Python linenumbers
+from sklearn.model_selection import cross_val_score
+cross_val_score(logreg, X, y, cv=10, scoring='roc_auc').mean()
+
+Output:
+0.7378233618233618
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Listing [clas_auc_scoring]: AUC como función de scoring de cross_val_score]
+
+Se han mostrado muchas maneras de evaluar un clasificador, la matriz de confusión y la curva ROC son herramientas que describen como un clasificador está rindiendo y se pueden usar ambas siempre que sea posible. La ventaja principal de la matriz de confusión, es que muchas otras métricas de evaluación se pueden calcular desde ella, y permite enfocarse en aquellas que encajan con los objetivos finales, y además, se extiende facilmente a problemas de varias clases, en los cuales hay más de dos clases de respuesta. La principal ventaja de las curvas ROC y AUC es que no requieren que se elija un umbral de clasificación, y funcionan aunque haya un desbalance entre las clases. Sin embargo, son menos interpretables que la matriz de confusión cuando el problema tiene más de dos clases.
+
+<link rel="stylesheet" href="res/md/viu.css">
+<style class="fallback">body{visibility:hidden}</style><script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="res/md/markdeep.min.js?" charset="utf-8"></script>
